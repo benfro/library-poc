@@ -8,11 +8,16 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 
 You can run your application in dev mode that enables live coding using:
 
+First run a Postgres image:
+```shell script
+podman run --name db-server  -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d -p 5432:5432  docker.io/arm64v8/postgres
+```
+then run it with
 ```shell script
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:APP_PORT/q/dev/>.
 
 ## Packaging and running the application
 
