@@ -5,6 +5,14 @@
     <artifactId>api-gateway</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>quarkiverse</id>
+            <name>quarkiverse</name>
+            <url>http://io.quarkiverse.rsocket</url>
+        </repository>
+    </repositories>
+
     <properties>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
         <maven.compiler.release>21</maven.compiler.release>
@@ -51,6 +59,11 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.quarkiverse.rsocket</groupId>-->
+<!--            <artifactId>quarkus-rsocket</artifactId>-->
+<!--            <version>0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
