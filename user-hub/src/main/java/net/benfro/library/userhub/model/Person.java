@@ -8,17 +8,19 @@ import org.hibernate.proxy.HibernateProxy;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Entity
 public class Person {
 
