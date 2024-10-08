@@ -2,7 +2,6 @@ package net.benfro.library.userhub;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 @SpringBootApplication
@@ -10,8 +9,8 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 @EnableR2dbcRepositories(basePackages = {"net.benfro.library.userhub"})
 public class UserHubApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(UserHubApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(UserHubApplication.class, args);
+    }
 
 }

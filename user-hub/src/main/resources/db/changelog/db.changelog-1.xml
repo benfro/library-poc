@@ -2,36 +2,31 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-        http://www.liquibase.org/xml/ns/pro
-        http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-<!--  <preCondition>-->
-<!--    <preConditionName  preConditionAttribute="value">-->
-<!--  </preCondition>-->
+    <!--  <preCondition>-->
+    <!--    <preConditionName  preConditionAttribute="value">-->
+    <!--  </preCondition>-->
 
-  <changeSet  id="1"  author="benfro" runInTransaction="false">
-    <preConditions onFail="MARK_RAN">
-      <not>
-        <sqlCheck expectedResult="1"> SELECT 1 FROM pg_database WHERE datname = 'person_service';</sqlCheck>
-      </not>
-    </preConditions>
-    <sql>CREATE DATABASE person_service;</sql>
-  </changeSet>
-  <changeSet  id="2"  author="benfro">
-    <createTable tableName="person">
-      <column name="id" type="SERIAL">
-        <constraints primaryKey="true" primaryKeyName="person_pk"/>
-      </column>
-      <column name="first_name" type="TEXT" />
-      <column name="last_name" type="TEXT" />
-      <column name="email" type="TEXT" />
-    </createTable>
-    <createSequence sequenceName="person_id_seq" startValue="1" incrementBy="1" />
-  </changeSet>
+    <changeSet id="1" author="benfro" runInTransaction="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="1">SELECT 1 FROM pg_database WHERE datname = 'person_service';</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>CREATE
+        DATABASE person_service;</sql>
+    </changeSet>
+    <changeSet id="2" author="benfro">
+        <createTable tableName="person">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="person_pk"/>
+            </column>
+            <column name="first_name" type="TEXT"/>
+            <column name="last_name" type="TEXT"/>
+            <column name="email" type="TEXT"/>
+        </createTable>
+        <createSequence sequenceName="person_id_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
 </databaseChangeLog>

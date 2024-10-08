@@ -1,11 +1,11 @@
 package net.benfro.poc.library;
 
 import io.quarkus.runtime.StartupEvent;
-import org.eclipse.microprofile.reactive.messaging.*;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.reactive.messaging.*;
+
 import java.util.stream.Stream;
 
 @ApplicationScoped

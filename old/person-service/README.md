@@ -9,15 +9,19 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 You can run your application in dev mode that enables live coding using:
 
 First run a Postgres image:
+
 ```shell script
 podman run --name db-server  -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d -p 5432:5432  docker.io/arm64v8/postgres
 ```
+
 then run it with
+
 ```shell script
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:APP_PORT/q/dev/>.
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only
+> at <http://localhost:APP_PORT/q/dev/>.
 
 ## Packaging and running the application
 
@@ -60,10 +64,14 @@ If you want to learn more about building native executables, please consult <htt
 
 ## Related Guides
 
-- Mutiny ([guide](https://quarkus.io/guides/mutiny-primer)): Write reactive applications with the modern Reactive Programming library Mutiny
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Messaging - Kafka Connector ([guide](https://quarkus.io/guides/kafka-getting-started)): Connect to Kafka with Reactive Messaging
-- Reactive PostgreSQL client ([guide](https://quarkus.io/guides/reactive-sql-clients)): Connect to the PostgreSQL database using the reactive pattern
+- Mutiny ([guide](https://quarkus.io/guides/mutiny-primer)): Write reactive applications with the modern Reactive
+  Programming library Mutiny
+- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus
+  REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
+- Messaging - Kafka Connector ([guide](https://quarkus.io/guides/kafka-getting-started)): Connect to Kafka with Reactive
+  Messaging
+- Reactive PostgreSQL client ([guide](https://quarkus.io/guides/reactive-sql-clients)): Connect to the PostgreSQL
+  database using the reactive pattern
 
 ## Provided Code
 
@@ -72,7 +80,6 @@ If you want to learn more about building native executables, please consult <htt
 Use Quarkus Messaging
 
 [Related Apache Kafka guide section...](https://quarkus.io/guides/kafka-reactive-getting-started)
-
 
 ### REST
 

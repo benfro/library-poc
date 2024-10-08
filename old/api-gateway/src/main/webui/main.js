@@ -1,7 +1,7 @@
 import './style.css'
 import quarkusLogo from '/quarkus.svg'
 import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+import {setupCounter} from './counter.js'
 
 document.querySelector('#app').innerHTML = `
   <div>
