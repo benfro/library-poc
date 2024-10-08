@@ -1,13 +1,18 @@
 package net.benfro.library.userhub.model;
 
 
+import static jakarta.persistence.GenerationType.SEQUENCE;
+
 import java.util.Objects;
 
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.proxy.HibernateProxy;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +29,12 @@ import lombok.ToString;
 @Entity
 public class Person {
 
-    @Id
+    @jakarta.persistence.Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy=GenerationType.AUTO)
+    @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ")
+    @GeneratedValue(strategy = SEQUENCE, generator = "person_id_seq")
+    @org.springframework.data.annotation.Id
     private Long id;
     private String firstName;
     private String lastName;
