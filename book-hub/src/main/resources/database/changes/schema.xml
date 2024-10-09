@@ -8,12 +8,12 @@
     <changeSet id="bookhub-1" author="benfro" runInTransaction="false">
         <preConditions onFail="MARK_RAN">
             <not>
-                <sqlCheck expectedResult="1">SELECT 1 FROM pg_database WHERE datname = 'person_service';</sqlCheck>
+                <sqlCheck expectedResult="1">SELECT count(*) FROM pg_database WHERE datname = 'book_service';</sqlCheck>
             </not>
         </preConditions>
         <sql>CREATE DATABASE book_service;</sql>
     </changeSet>
-    <changeSet id="bookhub-22" author="benfro">
+    <changeSet id="bookhub-2" author="benfro">
         <createTable tableName="book">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="book_pk"/>
