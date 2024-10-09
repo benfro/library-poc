@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="bookhub-1" author="benfro" runInTransaction="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="1">SELECT 1 FROM pg_database WHERE datname = 'person_service';</sqlCheck>
+            </not>
+        </preConditions>
+        <sql>CREATE DATABASE book_service;</sql>
+    </changeSet>
+    <changeSet id="bookhub-22" author="benfro">
+        <createTable tableName="book">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="book_pk"/>
+            </column>
+            <column name="title" type="TEXT"/>
+            <column name="author" type="TEXT"/>
+            <column name="publisher" type="TEXT"/>
+            <column name="isbn" type="TEXT">
+                <constraints unique="true" uniqueConstraintName="book_isbn_unique" />
+            </column>
+        </createTable>
+        <createSequence sequenceName="book_id_seq" startValue="1000" incrementBy="1"/>
+    </changeSet>
+</databaseChangeLog>
