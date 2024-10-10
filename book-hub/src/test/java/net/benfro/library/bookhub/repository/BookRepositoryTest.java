@@ -102,7 +102,7 @@ class BookRepositoryTest implements IntegrationTest {
     }
 
     @Test
-    void findByEmail_should_return_empty_if_Book_does_not_exist() {
+    void findByEmail_should_return_empty_if_book_does_not_exist() {
         // given
         // no Book
 
@@ -157,10 +157,10 @@ class BookRepositoryTest implements IntegrationTest {
         var updatedBook = Book.builder()
             .id(id)
             .payload(Book.Payload.builder()
-                .title("John")
-                .author("Doe")
-                .publisher("john.doe@example.com")
-                .isbn("34576")
+                .title("Johnny")
+                .author("Dough")
+                .publisher("johnny.dough@example.com")
+                .isbn(DataGenerator.ISBN())
                 .build())
             .build();
 
