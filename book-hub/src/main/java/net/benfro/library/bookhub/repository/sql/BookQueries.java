@@ -16,7 +16,7 @@ public enum BookQueries implements Supplier<String> {
     // language=sql
     PERSIST("""
             insert into book (id, title, author, publisher, isbn) 
-            values (:is, :title, :author, :publisher, :isbn)
+            values (:id, :title, :author, :publisher, :isbn)
             """),
     // language=sql
     SELECT_BY_ID("""

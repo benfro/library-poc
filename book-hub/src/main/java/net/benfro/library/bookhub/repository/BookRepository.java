@@ -26,12 +26,14 @@ public class BookRepository {
     }
 
     public Mono<Long> reserveId() {
-        return db.sql(BookQueries.RESERVE_ID).map(r -> r.get(0, Long.class)).one();
+        return db.sql(BookQueries.RESERVE_ID)
+            .mapValue(Long.class)
+            .one();
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public Mono<Void> persist(Book book) {
-        Validate.notNull(book, "consultant can't be null");
+        Validate.notNull(book, "book can't be null");
 
         return db.sql(BookQueries.PERSIST)
                 .bind("id", book.getId())
@@ -44,7 +46,7 @@ public class BookRepository {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public Mono<Void> update(Book book) {
-        Validate.notNull(book, "consultant can't be null");
+        Validate.notNull(book, "Book can't be null");
 
         return db.sql(BookQueries.UPDATE)
                 .bind("id", book.getId())
@@ -56,8 +58,8 @@ public class BookRepository {
     }
 
     /**
-     * Get all consultants.
-     * @return A {@link Flux} of all consultants.
+     * Get all books.
+     * @return A {@link Flux} of all books.
      */
     public Flux<Book> all() {
         return db.sql(BookQueries.SELECT_ALL)
@@ -65,10 +67,10 @@ public class BookRepository {
                 .all();
     }
 
-    public Mono<Book> findByEmail(String emailAddress) {
+    public Mono<Book> findByISBN(String emailAddress) {
         Validate.notEmpty(emailAddress, "emailAddress can't be null or empty");
         return db.sql(BookQueries.SELECT_BY_ISBN)
-                .bind("emailAddress", emailAddress)
+                .bind("isbn", emailAddress)
                 .map(rowToBook())
                 .one();
     }
