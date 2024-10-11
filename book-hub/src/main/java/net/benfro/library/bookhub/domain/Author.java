@@ -1,11 +1,11 @@
 package net.benfro.library.bookhub.domain;
 
+import java.util.Collection;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Collection;
 
 @Slf4j
 @Data
@@ -14,7 +14,9 @@ public class Author {
 
     private Long id;
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
 
     @Singular
     private Collection<Long> books;

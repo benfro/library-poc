@@ -24,10 +24,10 @@ public class ResetExtension implements AfterEachCallback {
                 .getBean(ReactiveTransactionManager.class);
         var tx = TransactionalOperator.create(transactionManager);
 
-//        Flux.just("login_stats", "consultant").flatMap(table -> db.sql("delete from %s".formatted(table)).then())
-//                .as(tx::transactional)
-//                .collectList()
-//                .block();
+        Flux.just( "book").flatMap(table -> db.sql("delete from %s".formatted(table)).then())
+                .as(tx::transactional)
+                .collectList()
+                .block();
 
         // Reset the sync too so a test doesn't get released off an old event
         applicationContext.getBean(LoginEventHandledSync.class).reset();
