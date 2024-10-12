@@ -17,13 +17,11 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Setter
 @ToString
 @RequiredArgsConstructor
-//@NoArgsConstructor
+@Builder
 @Entity
 public class Person {
 
     @jakarta.persistence.Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @GeneratedValue(strategy=GenerationType.AUTO)
     @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ")
     @GeneratedValue(strategy = SEQUENCE, generator = "person_id_seq")
     @org.springframework.data.annotation.Id

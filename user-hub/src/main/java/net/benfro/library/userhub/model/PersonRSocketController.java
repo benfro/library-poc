@@ -4,6 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+
+import net.benfro.library.userhub.api.person.PersonConverter;
+import net.benfro.library.userhub.api.person.PersonRequest;
+import net.benfro.library.userhub.api.person.PersonResponse;
+import net.benfro.library.userhub.repository.PersonRepository;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -21,6 +27,23 @@ public class PersonRSocketController {
                 .map(p -> PersonConverter.INSTANCE.personToPersonResponse(p))
                 .doOnError(e -> log.error(e.getMessage(), e));
     }
+
+    @Transactional
+    @MessageMapping("updatePerson")
+    public Mono<Void> updatePerson(PersonRequest request) {
+        return personRepository.findById(request.getId())
+            .doOnNext(person -> PersonConverter.INSTANCE.updatePersonInstance(request, person))
+            .flatMap(person -> personRepository.save(person))
+            .switchIfEmpty(Mono.error(new RuntimeException("Person not found")))
+            .then();
+    }
+
+//    @Transactional
+//    Mono<Book> save(Book book){
+//        return repository.findByIsbn(book.getIsbn())
+//            .flatMap(found -> repository.save(found.copyMutableValuesFrom(book)))
+//            .switchIfEmpty(repository.save(book));
+//    }
 
 
 }

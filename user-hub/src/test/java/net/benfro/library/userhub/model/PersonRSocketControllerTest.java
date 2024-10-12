@@ -2,45 +2,32 @@ package net.benfro.library.userhub.model;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
 import org.springframework.messaging.rsocket.RSocketRequester;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
+import org.springframework.transaction.ReactiveTransactionManager;
+import org.springframework.transaction.reactive.TransactionalOperator;
+
+import net.benfro.library.userhub.api.person.PersonConverter;
+import net.benfro.library.userhub.api.person.PersonRequest;
+import net.benfro.library.userhub.api.person.PersonResponse;
+import net.benfro.library.userhub.repository.PersonRepository;
+import net.benfro.library.userhub.test.IntegrationTest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
-@Testcontainers
-@SpringBootTest
-@EnableR2dbcAuditing
-class PersonRSocketControllerTest {
+class PersonRSocketControllerTest implements IntegrationTest {
 
     private static RSocketRequester requester;
-
-    @Container
-    @ServiceConnection
-    private static PostgreSQLContainer<?> postgresContainer =
-            new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"))
-                    .withPassword("postgres").withUsername("postgres").withDatabaseName("person_service");
-
-    @Autowired
-    private DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
 
     @BeforeAll
     public static void setupOnce(@Autowired RSocketRequester.Builder builder,
                                  @Value("${spring.rsocket.server.port}") Integer port) {
-        postgresContainer.start();
-
         requester = builder
                 .connectTcp("localhost", port)
                 .block();
@@ -49,16 +36,26 @@ class PersonRSocketControllerTest {
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    private ReactiveTransactionManager transactionManager;
+
+    private TransactionalOperator tx;
+
+    @BeforeEach
+    void setup() {
+        tx = TransactionalOperator.create(transactionManager);
+    }
+
     //    @Transactional
     @Test
     void testRequestGetsResponse() {
 
-        personRepository.save(new Person(null, "per", "andersson", "per@pandersson.com")).block();
-
-        personRepository.findById(1L).subscribe(i -> log.info("Found {}", i));
+        Person saved = personRepository.save(new Person(null, "per", "andersson", "per@pandersson.com"))
+            .as(tx::transactional)
+            .block();
 
         // Send a request message (1)
-        PersonRequest data = new PersonRequest().withId(1L);
+        PersonRequest data = new PersonRequest().withId(saved.getId());
         Mono<PersonResponse> result = requester
                 .route("findPersonById")
                 .data(data)
@@ -69,9 +66,34 @@ class PersonRSocketControllerTest {
                 .create(result)
                 .consumeNextWith(message -> {
                     assertEquals("per", message.getFirstName());
-//                assertThat(message.getIndex()).isEqualTo(0);
                 })
                 .verifyComplete();
+    }
+
+    @Test
+//    @Transactional
+    void testUpdate() {
+
+        Person saved = personRepository.save(new Person(null, "per", "andersson", "per@pandersson.com"))
+            .as(tx::transactional)
+            .block();
+
+        PersonRequest data = PersonConverter.INSTANCE.personToPersonRequest(saved);
+        data.setFirstName("PELLE");
+        // Send a request message (1)
+        Mono<Void> result = requester
+            .route("updatePerson")
+            .data(data)
+            .retrieveMono(Void.class);
+
+        // Verify that the response message contains the expected data (2)
+        StepVerifier
+            .create(result)
+            .verifyComplete();
+
+        Person savedBlock = personRepository.findById(saved.getId())
+            .block();
+        assertEquals("PELLE", savedBlock.getFirstName());
     }
 
 }

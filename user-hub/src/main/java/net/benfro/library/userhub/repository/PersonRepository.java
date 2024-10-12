@@ -1,7 +1,9 @@
-package net.benfro.library.userhub.model;
+package net.benfro.library.userhub.repository;
 
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
+
+import net.benfro.library.userhub.model.Person;
 import reactor.core.publisher.Mono;
 
 @Repository
