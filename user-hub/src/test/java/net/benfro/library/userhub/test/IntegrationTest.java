@@ -3,32 +3,25 @@ package net.benfro.library.userhub.test;
 import java.util.Map;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.MapPropertySource;
-import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.EmbeddedKafkaZKBroker;
-import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import liquibase.integration.spring.SpringLiquibase;
 import net.benfro.library.userhub.UserHubApplication;
-import reactor.kafka.sender.SenderOptions;
 
 @SpringBootTest(classes = {UserHubApplication.class, IntegrationTest.TestConfig.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -77,23 +70,23 @@ public interface IntegrationTest {
     @Configuration
     class TestConfig {
 
-        @Bean
-        public WebTestClient webTestClient(ApplicationContext applicationContext) {
-            return WebTestClient.bindToApplicationContext(applicationContext)
-                    .configureClient()
-                    .build();
-        }
-
-        @Bean
-        @Autowired
-        public ReactiveKafkaProducerTemplate<String, String> producer(EmbeddedKafkaBroker broker) {
-            var producerProps = KafkaTestUtils.producerProps(broker);
-
-            producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-            producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-
-            return new ReactiveKafkaProducerTemplate<>(SenderOptions.create(producerProps));
-        }
+//        @Bean
+//        public WebTestClient webTestClient(ApplicationContext applicationContext) {
+//            return WebTestClient.bindToApplicationContext(applicationContext)
+//                    .configureClient()
+//                    .build();
+//        }
+//
+//        @Bean
+//        @Autowired
+//        public ReactiveKafkaProducerTemplate<String, String> producer(EmbeddedKafkaBroker broker) {
+//            var producerProps = KafkaTestUtils.producerProps(broker);
+//
+//            producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+//            producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+//
+//            return new ReactiveKafkaProducerTemplate<>(SenderOptions.create(producerProps));
+//        }
     }
 
     class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
