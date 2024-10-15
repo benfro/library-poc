@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="bookhub-1" author="benfro" runInTransaction="false">
+    <changeSet id="BOOK-1" author="benfro" runInTransaction="false">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sqlCheck expectedResult="1">SELECT count(*) FROM pg_database WHERE datname = 'book_service';</sqlCheck>
@@ -13,7 +13,7 @@
         </preConditions>
         <sql>CREATE DATABASE book_service;</sql>
     </changeSet>
-    <changeSet id="bookhub-2" author="benfro">
+    <changeSet id="BOOK-2" author="benfro">
         <createTable tableName="book">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="book_pk"/>

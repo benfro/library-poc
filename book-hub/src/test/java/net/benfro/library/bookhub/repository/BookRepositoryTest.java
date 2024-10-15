@@ -41,7 +41,7 @@ class BookRepositoryTest implements IntegrationTest {
     @Test
     void getById_should_return_empty_if_book_does_not_exist() {
         // given
-        // no consultant
+        // no book
 
         // when
         var result = bookRepository.getById(1234L).blockOptional();

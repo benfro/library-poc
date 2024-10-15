@@ -27,17 +27,21 @@ services:
 #    container_name: gateway
     image: library-poc/gateway:latest
     build:
-      context: ../gateway/gateway-api/src/main/docker/
-      dockerfile: Dockerfile
+      context: ../gateway/gateway-api/
+      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "27060:7060"
     environment:
-      DATABASE_HOST: database
-      DATABASE_PORT: 5432
-      DATABASE_NAME: postgres
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
+#      DATABASE_HOST: database
+#      DATABASE_PORT: 5432
+#      DATABASE_NAME: postgres
+#      DATABASE_USER: postgres
+#      DATABASE_PASSWORD: postgres
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    networks:
+      default:
+        aliases:
+          - Library-Gateway
     depends_on:
       - kafka
   user-hub:
@@ -45,8 +49,8 @@ services:
 #    container_name: user-hub
     image: library-poc/user-hub:latest
     build:
-      context: ../user-hub/src/main/docker/
-      dockerfile: Dockerfile
+      context: ../user-hub/
+      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "28060:8060"
     environment:
@@ -64,8 +68,8 @@ services:
 #    container_name: book-hub
     image: library-poc/book-hub:latest
     build:
-      context: ../book-hub/src/main/docker/
-      dockerfile: Dockerfile
+      context: ../book-hub/
+      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "29060:9060"
     environment:
@@ -82,12 +86,12 @@ services:
 #    container_name: library
     image: library-poc/library-core:latest
     build:
-      context: ../library-core/src/main/docker/
-      dockerfile: Dockerfile
+      context: ../library-core/
+      dockerfile: ./src/main/docker/Dockerfile
     ports:
       - "39060:19060"
     environment:
-      DATABASE_HOST: database
+      DATABASE_HOST: localhost
       DATABASE_PORT: 5432
       DATABASE_NAME: library_db
       DATABASE_USER: postgres

@@ -9,7 +9,7 @@
     <!--    <preConditionName  preConditionAttribute="value">-->
     <!--  </preCondition>-->
 
-    <changeSet id="1" author="benfro" runInTransaction="false">
+    <changeSet id="USER-1" author="benfro" runInTransaction="false">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sqlCheck expectedResult="1">SELECT count(*) FROM pg_database WHERE datname = 'person_service';</sqlCheck>
@@ -17,7 +17,7 @@
         </preConditions>
         <sql>CREATE DATABASE person_service;</sql>
     </changeSet>
-    <changeSet id="2" author="benfro">
+    <changeSet id="USER-2" author="benfro">
         <createTable tableName="person">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="person_pk"/>
