@@ -1,6 +1,7 @@
 ## Mine
 - https://github.com/calidion/Vite-React-Typescript-Sass-Bootstrap-Starter
 - https://vite.dev/guide/
+- https://getbootstrap.com/docs/5.2/getting-started/vite/
 
 # React + TypeScript + Vite
 
