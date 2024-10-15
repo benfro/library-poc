@@ -12,7 +12,7 @@ log_message() {
 log_message "${YELLOW}🚀 Container startup initiated...${NC}"
 
 log_message "${BLUE}📚 Extracting changelog file from application binary...${NC}"
-jar xf /opt/consultant-service.jar BOOT-INF/classes/database/changes/schema.xml
+jar xf /opt/library-core.jar BOOT-INF/classes/database/changes/schema.xml
 log_message "${GREEN}📚 Changelog file extraction complete.${NC}"
 
 log_message "${BLUE}🔧 Executing liquibase to upgrade database...${NC}"
@@ -28,4 +28,4 @@ log_message "${GREEN}🔧 Database upgrade successful.${NC}"
 # Starting application...
 log_message "${YELLOW}🚀 Starting application...${NC}"
 
-java -Dspring.profiles.active=prod -jar /opt/book-hub.jar
+java -Dspring.profiles.active=prod -jar /opt/library-core.jar

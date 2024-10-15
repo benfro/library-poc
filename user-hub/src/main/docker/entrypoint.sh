@@ -12,13 +12,13 @@ log_message() {
 log_message "${YELLOW}🚀 Container startup initiated...${NC}"
 
 log_message "${BLUE}📚 Extracting changelog file from application binary...${NC}"
-jar xf /opt/consultant-service.jar BOOT-INF/classes/database/changes/schema.xml
+jar xf /opt/user-hub.jar BOOT-INF/classes/database/changes/schema.xml
 log_message "${GREEN}📚 Changelog file extraction complete.${NC}"
 
 log_message "${BLUE}🔧 Executing liquibase to upgrade database...${NC}"
 liquibase --driver=org.postgresql.Driver \
     --classpath=${CLASSPATH} \
-    --changeLogFile=BOOT-INF/classes/database/changes/schema.xml \
+    --changeLogFile=BOOT-INF/classes/database/changes/schema.yaml \
     --url="jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}" \
     --username=${DATABASE_USER} \
     --password=${DATABASE_PASSWORD} \
@@ -28,4 +28,4 @@ log_message "${GREEN}🔧 Database upgrade successful.${NC}"
 # Starting application...
 log_message "${YELLOW}🚀 Starting application...${NC}"
 
-java -Dspring.profiles.active=prod -jar /opt/book-hub.jar
+java -Dspring.profiles.active=prod -jar /opt/user-hub.jar

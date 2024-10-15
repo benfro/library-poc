@@ -24,7 +24,7 @@ ENV CLASSPATH=/postgresql-${POSTGRES_VERSION}.jar
 # Add the liquibase scripts to PATH
 ENV PATH=${PATH}:${LIQUIBASE_HOME}
 
-COPY target/book-hub-0.0.1-SNAPSHOT.jar /opt/book-hub.jar
+COPY target/gateway-api-0.0.1-SNAPSHOT.jar /opt/gateway-api.jar
 COPY src/main/docker/entrypoint.sh /opt/entrypoint.sh
 
 ENTRYPOINT ["sh", "/opt/entrypoint.sh"]
