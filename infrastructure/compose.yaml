@@ -24,12 +24,13 @@ services:
     depends_on:
       - zookeeper
   gateway-api:
-    image: library-poc/gateway
+#    container_name: gateway
+    image: library-poc/gateway:latest
     build:
       context: ../gateway/gateway-api/src/main/docker/
       dockerfile: Dockerfile
     ports:
-      - "28080:7060"
+      - "27060:7060"
     environment:
       DATABASE_HOST: database
       DATABASE_PORT: 5432
@@ -40,16 +41,18 @@ services:
     depends_on:
       - kafka
   user-hub:
-    image: library-poc/user-hub
+    restart: always
+#    container_name: user-hub
+    image: library-poc/user-hub:latest
     build:
       context: ../user-hub/src/main/docker/
       dockerfile: Dockerfile
     ports:
-      - "28080:8060"
+      - "28060:8060"
     environment:
-      DATABASE_HOST: database
+      DATABASE_HOST: localhost
       DATABASE_PORT: 5432
-      DATABASE_NAME: postgres
+      DATABASE_NAME: user_service
       DATABASE_USER: postgres
       DATABASE_PASSWORD: postgres
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -57,16 +60,18 @@ services:
       - database
       - kafka
   book-hub:
-    image: library-poc/book-hub
+    restart: always
+#    container_name: book-hub
+    image: library-poc/book-hub:latest
     build:
       context: ../book-hub/src/main/docker/
       dockerfile: Dockerfile
     ports:
-      - "28080:9060"
+      - "29060:9060"
     environment:
-      DATABASE_HOST: database
+      DATABASE_HOST: localhost
       DATABASE_PORT: 5432
-      DATABASE_NAME: postgres
+      DATABASE_NAME: book_service
       DATABASE_USER: postgres
       DATABASE_PASSWORD: postgres
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -74,16 +79,17 @@ services:
       - database
       - kafka
   library-core:
-    image: library-poc/library-core
+#    container_name: library
+    image: library-poc/library-core:latest
     build:
       context: ../library-core/src/main/docker/
       dockerfile: Dockerfile
     ports:
-      - "28080:19060"
+      - "39060:19060"
     environment:
       DATABASE_HOST: database
       DATABASE_PORT: 5432
-      DATABASE_NAME: postgres
+      DATABASE_NAME: library_db
       DATABASE_USER: postgres
       DATABASE_PASSWORD: postgres
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
