@@ -24,9 +24,10 @@ services:
     depends_on:
       - zookeeper
   gateway-api:
+    image: library-poc/gateway
     build:
-      context: ../gateway/gateway-api
-      dockerfile: src/main/docker/Dockerfile
+      context: ../gateway/gateway-api/src/main/docker/
+      dockerfile: Dockerfile
     ports:
       - "28080:7060"
     environment:
@@ -37,9 +38,9 @@ services:
       DATABASE_PASSWORD: postgres
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
-      - database
       - kafka
   user-hub:
+    image: library-poc/user-hub
     build:
       context: ../user-hub/src/main/docker/
       dockerfile: Dockerfile
@@ -56,9 +57,10 @@ services:
       - database
       - kafka
   book-hub:
+    image: library-poc/book-hub
     build:
-      context: ../book-hub/
-      dockerfile: src/main/docker/Dockerfile
+      context: ../book-hub/src/main/docker/
+      dockerfile: Dockerfile
     ports:
       - "28080:9060"
     environment:
@@ -72,6 +74,7 @@ services:
       - database
       - kafka
   library-core:
+    image: library-poc/library-core
     build:
       context: ../library-core/src/main/docker/
       dockerfile: Dockerfile
@@ -86,4 +89,4 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
       - database
-      - kafka-
+      - kafka

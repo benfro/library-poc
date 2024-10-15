@@ -1,9 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: database/changelog/db.changelog-1.xml
-#  - include:
-#      file: db/changelog/db.changelog-sql-example.sql
-#  - include:
-#      file: db/changelog/db.changelog-json-example.json
-#  - include:
-#      file: db/changelog/db.changelog-xml-example.xml

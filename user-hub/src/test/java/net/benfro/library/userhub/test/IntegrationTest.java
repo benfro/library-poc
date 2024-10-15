@@ -61,7 +61,7 @@ public interface IntegrationTest {
             var liquibase = new SpringLiquibase();
 
             liquibase.setDataSource(ds);
-            liquibase.setChangeLog("classpath:database/changelog.yaml");
+            liquibase.setChangeLog("classpath:database/changelog.xml");
 
             return liquibase;
         }
