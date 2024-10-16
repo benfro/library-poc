@@ -26,6 +26,6 @@
             <column name="last_name" type="TEXT"/>
             <column name="email" type="TEXT"/>
         </createTable>
-        <createSequence sequenceName="person_id_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="person_id_seq" startValue="1000" incrementBy="1"/>
     </changeSet>
 </databaseChangeLog>

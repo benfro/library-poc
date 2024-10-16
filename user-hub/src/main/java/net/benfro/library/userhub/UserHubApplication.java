@@ -15,8 +15,6 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import java.util.Arrays;
 
 @SpringBootApplication
-//@ComponentScan(basePackages={"net.benfro.library.userhub"})
-@EnableR2dbcRepositories(basePackages = {"net.benfro.library.userhub.repository"})
 public class UserHubApplication {
 
     @Import({DataSourceAutoConfiguration.class, LiquibaseAutoConfiguration.class})

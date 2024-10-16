@@ -38,7 +38,7 @@ class PersonRepositoryTest implements IntegrationTest {
         // no user
 
         // when
-        var result = personRepository.findById(1234L).blockOptional();
+        var result = personRepository.getById(1234L).blockOptional();
 
         // then
         assertThat(result).isEmpty();
@@ -48,18 +48,20 @@ class PersonRepositoryTest implements IntegrationTest {
     void findById_should_return_persisted_person() {
         // given
         var book = Person.builder()
-            .firstName("John")
-            .lastName("Doe")
-            .email("john.doe@example.com")
-            .build();
+                .payload(Person.Payload.builder()
+                        .firstName("Per")
+                        .lastName("andersson")
+                        .email("per@pandersson.com")
+                        .build())
+                .build();
 //
         // when
-        var saved = personRepository.save(book)
+        var saved = personRepository.persist(book)
             .as(tx::transactional)
             .block();
 
         // then
-        var persistedBook = personRepository.findById(saved.getId()).block();
+        var persistedBook = personRepository.getById(saved.getId()).block();
 
         assertThat(persistedBook).isEqualTo(book);
     }
@@ -68,18 +70,20 @@ class PersonRepositoryTest implements IntegrationTest {
     void findAll_should_return_persisted_persons() {
         // given
         var book = Person.builder()
-            .firstName("John")
-            .lastName("Doe")
-            .email("john.doe@example.com")
-            .build();
+                .payload(Person.Payload.builder()
+                        .firstName("Per")
+                        .lastName("andersson")
+                        .email("per@pandersson.com")
+                        .build())
+                .build();
 //
         // when
-        personRepository.save(book)
+        personRepository.persist(book)
             .as(tx::transactional)
             .block();
 
         // then
-        var users = personRepository.findAll().collectList().block();
+        var users = personRepository.all().collectList().block();
         assertThat(users).hasSize(1);
     }
 
@@ -87,13 +91,15 @@ class PersonRepositoryTest implements IntegrationTest {
     void findByISBN_should_return_matching_person() {
         // given
         var user = Person.builder()
-            .firstName("John")
-            .lastName("Doe")
-            .email("john.doe@example.com")
-            .build();
+                .payload(Person.Payload.builder()
+                        .firstName("Per")
+                        .lastName("andersson")
+                        .email("per@pandersson.com")
+                        .build())
+                .build();
 //
         // when
-        personRepository.save(user)
+        personRepository.persist(user)
             .as(tx::transactional)
             .block();
         // when
@@ -107,17 +113,22 @@ class PersonRepositoryTest implements IntegrationTest {
     void update_should_return_an_updated_person() {
         // given
         var user = Person.builder()
-            .firstName("John")
-            .lastName("Doe")
-            .email("john.doe@example.com")
-            .build();
+                .payload(Person.Payload.builder()
+                        .firstName("Per")
+                        .lastName("andersson")
+                        .email("per@pandersson.com")
+                        .build())
+                .build();
 
-        Person saved = personRepository.save(user)
+        Person saved = personRepository.persist(user)
             .as(tx::transactional)
             .block();
 
         // when
-        saved.setFirstName("Jane");
+        saved.setPayload(saved.getPayload().withFirstName("Jane"));
+        personRepository.update(saved)
+                .as(tx::transactional)
+                .block();
         var retrievedUser = personRepository.findByEmail("john.doe@example.com").block();
 
         // then

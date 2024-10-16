@@ -1,16 +1,7 @@
 package net.benfro.library.userhub.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.SequenceGenerator;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.proxy.HibernateProxy;
-
-import java.util.Objects;
-
-import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @AllArgsConstructor
 @Getter
@@ -18,38 +9,15 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @ToString
 @RequiredArgsConstructor
 @Builder
-@Entity
 public class Person {
 
-    @jakarta.persistence.Id
-    @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ")
-    @GeneratedValue(strategy = SEQUENCE, generator = "person_id_seq")
-    @org.springframework.data.annotation.Id
     private Long id;
-    private String firstName;
-    private String lastName;
-    @NaturalId
-    private String email;
 
-    @Override
-    public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
-                o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() :
-                this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
-        Person person = (Person) o;
-        return getId() != null && Objects.equals(getId(), person.getId());
+    private Payload payload;
+
+    @Builder
+    public record Payload(@With @Getter String firstName, @With @Getter String lastName, @With @Getter String email) {
+
     }
 
-    @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy ?
-                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
-                getClass().hashCode();
-    }
 }

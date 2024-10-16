@@ -1,6 +1,7 @@
 package net.benfro.library.userhub.model;
 
 import lombok.extern.slf4j.Slf4j;
+import net.benfro.library.userhub.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import org.springframework.transaction.reactive.TransactionalOperator;
 import net.benfro.library.userhub.api.person.PersonConverter;
 import net.benfro.library.userhub.api.person.PersonRequest;
 import net.benfro.library.userhub.api.person.PersonResponse;
-import net.benfro.library.userhub.repository.PersonRepository;
 import net.benfro.library.userhub.test.IntegrationTest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -50,7 +50,15 @@ class PersonRSocketControllerTest implements IntegrationTest {
     @Test
     void testRequestGetsResponse() {
 
-        Person saved = personRepository.save(new Person(null, "per", "andersson", "per@pandersson.com"))
+        var p = Person.builder()
+                .payload(Person.Payload.builder()
+                        .firstName("Per")
+                        .lastName("andersson")
+                        .email("per@pandersson.com")
+                        .build())
+                .build();
+
+        Person saved = personRepository.persist(p)
             .as(tx::transactional)
             .block();
 
@@ -74,7 +82,15 @@ class PersonRSocketControllerTest implements IntegrationTest {
 //    @Transactional
     void testUpdate() {
 
-        Person saved = personRepository.save(new Person(null, "per", "andersson", "per@pandersson.com"))
+        var p = Person.builder()
+                .payload(Person.Payload.builder()
+                        .firstName("Per")
+                        .lastName("andersson")
+                        .email("per@pandersson.com")
+                        .build())
+                .build();
+
+        Person saved = personRepository.persist(p)
             .as(tx::transactional)
             .block();
 
@@ -91,9 +107,9 @@ class PersonRSocketControllerTest implements IntegrationTest {
             .create(result)
             .verifyComplete();
 
-        Person savedBlock = personRepository.findById(saved.getId())
+        Person savedBlock = personRepository.getById(saved.getId())
             .block();
-        assertEquals("PELLE", savedBlock.getFirstName());
+        assertEquals("PELLE", savedBlock.getPayload().getFirstName());
     }
 
 }
