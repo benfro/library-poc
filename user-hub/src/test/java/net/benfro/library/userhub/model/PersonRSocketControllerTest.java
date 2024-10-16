@@ -1,7 +1,7 @@
 package net.benfro.library.userhub.model;
 
-import lombok.extern.slf4j.Slf4j;
-import net.benfro.library.userhub.repository.PersonRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,14 +11,14 @@ import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
+import lombok.extern.slf4j.Slf4j;
 import net.benfro.library.userhub.api.person.PersonConverter;
 import net.benfro.library.userhub.api.person.PersonRequest;
 import net.benfro.library.userhub.api.person.PersonResponse;
+import net.benfro.library.userhub.repository.PersonRepository;
 import net.benfro.library.userhub.test.IntegrationTest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 class PersonRSocketControllerTest implements IntegrationTest {
@@ -29,8 +29,8 @@ class PersonRSocketControllerTest implements IntegrationTest {
     public static void setupOnce(@Autowired RSocketRequester.Builder builder,
                                  @Value("${spring.rsocket.server.port}") Integer port) {
         requester = builder
-                .connectTcp("localhost", port)
-                .block();
+            .connectTcp("localhost", port)
+            .block();
     }
 
     @Autowired
@@ -50,51 +50,59 @@ class PersonRSocketControllerTest implements IntegrationTest {
     @Test
     void testRequestGetsResponse() {
 
+        Long id = personRepository.reserveId().block();
         var p = Person.builder()
-                .payload(Person.Payload.builder()
-                        .firstName("Per")
-                        .lastName("andersson")
-                        .email("per@pandersson.com")
-                        .build())
-                .build();
+            .id(id)
+            .payload(Person.Payload.builder()
+                .firstName("Per")
+                .lastName("andersson")
+                .email("per@pandersson.com")
+                .build())
+            .build();
 
-        Person saved = personRepository.persist(p)
+        personRepository.persist(p)
             .as(tx::transactional)
             .block();
 
         // Send a request message (1)
-        PersonRequest data = new PersonRequest().withId(saved.getId());
+        PersonRequest data = new PersonRequest().withId(id);
         Mono<PersonResponse> result = requester
-                .route("findPersonById")
-                .data(data)
-                .retrieveMono(PersonResponse.class);
+            .route("findPersonById")
+            .data(data)
+            .retrieveMono(PersonResponse.class);
 
         // Verify that the response message contains the expected data (2)
         StepVerifier
-                .create(result)
-                .consumeNextWith(message -> {
-                    assertEquals("per", message.getFirstName());
-                })
-                .verifyComplete();
+            .create(result)
+            .consumeNextWith(message -> {
+                assertEquals("Per", message.getFirstName());
+            })
+            .verifyComplete();
     }
 
     @Test
 //    @Transactional
     void testUpdate() {
 
+        Long id = personRepository.reserveId().block();
         var p = Person.builder()
-                .payload(Person.Payload.builder()
-                        .firstName("Per")
-                        .lastName("andersson")
-                        .email("per@pandersson.com")
-                        .build())
-                .build();
+            .id(id)
+            .payload(Person.Payload.builder()
+                .firstName("Per")
+                .lastName("andersson")
+                .email("per@pandersson.com")
+                .build())
+            .build();
 
-        Person saved = personRepository.persist(p)
+        personRepository.persist(p)
             .as(tx::transactional)
             .block();
 
-        PersonRequest data = PersonConverter.INSTANCE.personToPersonRequest(saved);
+        Person person = personRepository.getById(id)
+            .as(tx::transactional)
+            .block();
+
+        PersonRequest data = PersonConverter.INSTANCE.personToPersonRequest(person);
         data.setFirstName("PELLE");
         // Send a request message (1)
         Mono<Void> result = requester
@@ -107,7 +115,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
             .create(result)
             .verifyComplete();
 
-        Person savedBlock = personRepository.getById(saved.getId())
+        Person savedBlock = personRepository.getById(id)
             .block();
         assertEquals("PELLE", savedBlock.getPayload().getFirstName());
     }

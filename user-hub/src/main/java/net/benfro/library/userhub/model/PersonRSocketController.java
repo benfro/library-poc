@@ -32,9 +32,9 @@ public class PersonRSocketController {
     @MessageMapping("updatePerson")
     public Mono<Void> updatePerson(PersonRequest request) {
         return personRepository.getById(request.getId())
-            .doOnNext(person -> PersonConverter.INSTANCE.updatePersonInstance(request, person))
-            .flatMap(person -> personRepository.update(person))
             .switchIfEmpty(Mono.error(new RuntimeException("Person not found")))
+            .map(person -> PersonConverter.INSTANCE.updatePersonInstance(request, person))
+            .flatMap(person -> personRepository.update(person))
             .then();
     }
 

@@ -30,6 +30,6 @@ public class ResetExtension implements AfterEachCallback {
                 .block();
 
         // Reset the sync too so a test doesn't get released off an old event
-        applicationContext.getBean(LoginEventHandledSync.class).reset();
+        //applicationContext.getBean(LoginEventHandledSync.class).reset();
     }
 }

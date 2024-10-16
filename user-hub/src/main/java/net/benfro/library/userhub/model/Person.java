@@ -1,13 +1,17 @@
 package net.benfro.library.userhub.model;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.With;
 
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 @Builder
 public class Person {
 
@@ -16,7 +20,11 @@ public class Person {
     private Payload payload;
 
     @Builder
-    public record Payload(@With @Getter String firstName, @With @Getter String lastName, @With @Getter String email) {
+    public record Payload(
+        @With @Getter String firstName,
+        @With @Getter String lastName,
+        @With @Getter String email
+    ) {
 
     }
 

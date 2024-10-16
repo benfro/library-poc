@@ -1,7 +1,7 @@
 package net.benfro.library.userhub.repository.sql;
 
 import org.apache.commons.text.StringSubstitutor;
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,14 +30,14 @@ public class Squtils {
         sub = new StringSubstitutor(values);
     }
 
-    @NotNull
+//    @NotNull
     private String trimFieldsCommaSeparatedString(String commaSeparatedFields) {
         return Arrays.stream(commaSeparatedFields.split(","))
                 .map(String::trim)
                 .collect(Collectors.joining(", "));
     }
 
-    @NotNull
+//    @NotNull
     private String getUpdateParamsFields() {
         return Arrays.stream(values.get("fields")
                 .split(","))
@@ -46,7 +46,7 @@ public class Squtils {
                 .collect(Collectors.joining(", "));
     }
 
-    @NotNull
+//    @NotNull
     private String getParamsFields() {
         return Arrays.stream(values.get("fields")
                         .split(","))

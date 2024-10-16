@@ -1,7 +1,6 @@
 package net.benfro.library.userhub.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,35 +46,38 @@ class PersonRepositoryTest implements IntegrationTest {
     @Test
     void findById_should_return_persisted_person() {
         // given
-        var book = Person.builder()
-                .payload(Person.Payload.builder()
-                        .firstName("Per")
-                        .lastName("andersson")
-                        .email("per@pandersson.com")
-                        .build())
-                .build();
+        Long id = personRepository.reserveId().block();
+        var person = Person.builder()
+            .id(id)
+            .payload(Person.Payload.builder()
+                .firstName("Per")
+                .lastName("andersson")
+                .email("per@pandersson.com")
+                .build())
+            .build();
 //
         // when
-        var saved = personRepository.persist(book)
+        personRepository.persist(person)
             .as(tx::transactional)
             .block();
 
         // then
-        var persistedBook = personRepository.getById(saved.getId()).block();
+        var persistedBook = personRepository.getById(id).block();
 
-        assertThat(persistedBook).isEqualTo(book);
+        assertThat(persistedBook).isEqualTo(person);
     }
 
     @Test
     void findAll_should_return_persisted_persons() {
         // given
         var book = Person.builder()
-                .payload(Person.Payload.builder()
-                        .firstName("Per")
-                        .lastName("andersson")
-                        .email("per@pandersson.com")
-                        .build())
-                .build();
+            .id(personRepository.reserveId().block())
+            .payload(Person.Payload.builder()
+                .firstName("Per")
+                .lastName("andersson")
+                .email("per@pandersson.com")
+                .build())
+            .build();
 //
         // when
         personRepository.persist(book)
@@ -91,19 +93,20 @@ class PersonRepositoryTest implements IntegrationTest {
     void findByISBN_should_return_matching_person() {
         // given
         var user = Person.builder()
-                .payload(Person.Payload.builder()
-                        .firstName("Per")
-                        .lastName("andersson")
-                        .email("per@pandersson.com")
-                        .build())
-                .build();
+            .id(1L)
+            .payload(Person.Payload.builder()
+                .firstName("Per")
+                .lastName("andersson")
+                .email("per@pandersson.com")
+                .build())
+            .build();
 //
         // when
         personRepository.persist(user)
             .as(tx::transactional)
             .block();
         // when
-        var retrievedUser = personRepository.findByEmail("john.doe@example.com").block();
+        var retrievedUser = personRepository.findByEmail("per@pandersson.com").block();
 
         // then
         assertThat(retrievedUser).isEqualTo(user);
@@ -112,26 +115,30 @@ class PersonRepositoryTest implements IntegrationTest {
     @Test
     void update_should_return_an_updated_person() {
         // given
+        Long id = personRepository.reserveId().block();
         var user = Person.builder()
-                .payload(Person.Payload.builder()
-                        .firstName("Per")
-                        .lastName("andersson")
-                        .email("per@pandersson.com")
-                        .build())
-                .build();
+            .id(id)
+            .payload(Person.Payload.builder()
+                .firstName("Per")
+                .lastName("andersson")
+                .email("per@pandersson.com")
+                .build())
+            .build();
 
-        Person saved = personRepository.persist(user)
+        personRepository.persist(user)
             .as(tx::transactional)
             .block();
 
+        Person person = personRepository.getById(id).as(tx::transactional).block();
+
         // when
-        saved.setPayload(saved.getPayload().withFirstName("Jane"));
-        personRepository.update(saved)
-                .as(tx::transactional)
-                .block();
-        var retrievedUser = personRepository.findByEmail("john.doe@example.com").block();
+        person.setPayload(person.getPayload().withFirstName("Jane"));
+        personRepository.update(person)
+            .as(tx::transactional)
+            .block();
+        var retrievedUser = personRepository.findByEmail("per@pandersson.com").block();
 
         // then
-        assertThat(retrievedUser).isEqualTo(user);
+        assertThat(retrievedUser.getPayload().getFirstName()).isEqualTo("Jane");
     }
 }

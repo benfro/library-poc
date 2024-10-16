@@ -14,8 +14,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.MapPropertySource;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
-import org.springframework.kafka.test.EmbeddedKafkaZKBroker;
+//import org.springframework.kafka.test.EmbeddedKafkaBroker;
+//import org.springframework.kafka.test.EmbeddedKafkaZKBroker;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -35,7 +35,7 @@ public interface IntegrationTest {
         private static final PostgreSQLContainer postgres = (PostgreSQLContainer) new PostgreSQLContainer(PostgreSQLContainer.IMAGE)
                 .waitingFor(Wait.forListeningPort());
 
-        private static final EmbeddedKafkaBroker kafka = new EmbeddedKafkaZKBroker(1);
+//        private static final EmbeddedKafkaBroker kafka = new EmbeddedKafkaZKBroker(1);
 
 
         @Bean(initMethod = "start", destroyMethod = "close")
@@ -43,10 +43,10 @@ public interface IntegrationTest {
             return postgres;
         }
 
-        @Bean(destroyMethod = "destroy")
-        public EmbeddedKafkaBroker kafka() {
-            return kafka;
-        }
+//        @Bean(destroyMethod = "destroy")
+//        public EmbeddedKafkaBroker kafka() {
+//            return kafka;
+//        }
 
         @Bean
 //        @Autowired
@@ -95,15 +95,15 @@ public interface IntegrationTest {
         public void initialize(ConfigurableApplicationContext context) {
             var parent = new AnnotationConfigApplicationContext(ServiceConfig.class);
             var postgres = parent.getBean(PostgreSQLContainer.class);
-            var kafka = parent.getBean(EmbeddedKafkaBroker.class);
+//            var kafka = parent.getBean(EmbeddedKafkaBroker.class);
 
             var config = new MapPropertySource("test-conf", Map.of(
                     "database.host", postgres.getHost(),
                     "database.port", postgres.getFirstMappedPort(),
                     "database.name", postgres.getDatabaseName(),
                     "database.user", postgres.getUsername(),
-                    "database.password", postgres.getPassword(),
-                    "kafka.bootstrap-servers", kafka.getBrokersAsString()
+                    "database.password", postgres.getPassword()
+//                    "kafka.bootstrap-servers", kafka.getBrokersAsString()
             ));
 
             context.getEnvironment().getPropertySources().addFirst(config);
