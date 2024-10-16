@@ -3,6 +3,7 @@ package net.benfro.library.bookhub.repository;
 import io.r2dbc.spi.Readable;
 import net.benfro.library.bookhub.domain.Book;
 import net.benfro.library.bookhub.repository.sql.BookQueries;
+import net.benfro.library.bookhub.repository.sql.Squtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.r2dbc.core.DatabaseClient;
@@ -18,6 +19,7 @@ import java.util.function.Function;
 @Repository
 public class BookRepository {
 
+    private final Squtils sql = new Squtils("book", "id", "title, author, publisher, isbn");
     private final DatabaseClient db;
 
     @Autowired
@@ -35,12 +37,9 @@ public class BookRepository {
     public Mono<Void> persist(Book book) {
         Validate.notNull(book, "book can't be null");
 
-        return db.sql(BookQueries.PERSIST)
+        return db.sql(sql.insert())
                 .bind("id", book.getId())
-                .bind("title", book.getPayload().title())
-                .bind("author", book.getPayload().author())
-                .bind("publisher", book.getPayload().publisher())
-                .bind("isbn", book.getPayload().isbn())
+                .bindProperties(book.getPayload())
                 .then();
     }
 
@@ -48,12 +47,9 @@ public class BookRepository {
     public Mono<Void> update(Book book) {
         Validate.notNull(book, "Book can't be null");
 
-        return db.sql(BookQueries.UPDATE)
+        return db.sql(sql.update())
                 .bind("id", book.getId())
-                .bind("title", book.getPayload().title())
-                .bind("author", book.getPayload().author())
-                .bind("publisher", book.getPayload().publisher())
-                .bind("isbn", book.getPayload().isbn())
+                .bindProperties(book.getPayload())
                 .then();
     }
 
@@ -62,15 +58,16 @@ public class BookRepository {
      * @return A {@link Flux} of all books.
      */
     public Flux<Book> all() {
-        return db.sql(BookQueries.SELECT_ALL)
+        return db.sql(sql.selectAll())
                 .map(rowToBook())
                 .all();
     }
 
-    public Mono<Book> findByISBN(String emailAddress) {
-        Validate.notEmpty(emailAddress, "emailAddress can't be null or empty");
-        return db.sql(BookQueries.SELECT_BY_ISBN)
-                .bind("isbn", emailAddress)
+    public Mono<Book> findByISBN(String isbn) {
+        Validate.notEmpty(isbn, "ISBN can't be null or empty");
+        return db.sql(sql.selectAllWhere("isbn"))
+//        return db.sql(BookQueries.SELECT_BY_ISBN)
+                .bind("isbn", isbn)
                 .map(rowToBook())
                 .one();
     }
@@ -78,7 +75,7 @@ public class BookRepository {
     public Mono<Book> getById(Long id) {
         Validate.notNull(id, "id can't be null");
 
-        return db.sql(BookQueries.SELECT_BY_ID)
+        return db.sql(sql.selectById())
                 .bind("id", id)
                 .map(rowToBook())
                 .one();
@@ -91,7 +88,7 @@ public class BookRepository {
             return Flux.empty();
         }
 
-        return db.sql(BookQueries.SELECT_BY_IDS)
+        return db.sql(sql.selectByIds())
                 .bind("ids", ids)
                 .map(rowToBook())
                 .all();

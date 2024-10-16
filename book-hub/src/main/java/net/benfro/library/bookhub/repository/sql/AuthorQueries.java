@@ -7,11 +7,11 @@ import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor
-public enum BookQueries implements Supplier<String> {
+public enum AuthorQueries implements Supplier<String> {
 
     // language=sql
     RESERVE_ID("""
-            select nextval('book_id_seq')
+            select nextval('author_id_seq')
             """);
 
     private final String query;

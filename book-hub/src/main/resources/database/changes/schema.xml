@@ -27,4 +27,14 @@
         </createTable>
         <createSequence sequenceName="book_id_seq" startValue="1000" incrementBy="1"/>
     </changeSet>
+    <changeSet id="BOOK-3" author="benfro">
+        <createTable tableName="author">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="author_pk"/>
+            </column>
+            <column name="first_name" type="TEXT"/>
+            <column name="last_name" type="TEXT"/>
+        </createTable>
+        <createSequence sequenceName="author_id_seq" startValue="1000" incrementBy="1"/>
+    </changeSet>
 </databaseChangeLog>
