@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.LogicalOperator;
@@ -11,13 +12,21 @@ import cz.jirutka.rsql.parser.ast.Node;
 
 public class SqlSpecificationBuilder {
 
-    public String buildSql(Node node) {
-        String result = "where ";
-        if (node instanceof LogicalNode) {
-            result += buildSql((LogicalNode)node);
+    private final RSQLParser rsqlParser = new RSQLParser();
+
+    public String buildSql(String query) {
+        Node rootNode = rsqlParser.parse(query);
+        return "where " + rootNode.accept(new CustomRsqlVisitor());
+    }
+
+    String buildSql(Node node) {
+//        String result = "where ";
+        String result = "";
+        if (node instanceof LogicalNode logicalNode) {
+            result += buildSql(logicalNode);
         }
-        if (node instanceof ComparisonNode) {
-            result += buildSql((ComparisonNode)node);
+        if (node instanceof ComparisonNode comparisonNode) {
+            result += buildSql(comparisonNode);
         }
         return result;
     }
@@ -25,9 +34,9 @@ public class SqlSpecificationBuilder {
     private String buildSql(LogicalNode logicalNode) {
         List<String> specs = logicalNode.getChildren()
             .stream()
-            .map(node -> buildSql(node))
+            .map(this::buildSql)
             .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+            .toList();
 
         String result = specs.getFirst();
         if (logicalNode.getOperator() == LogicalOperator.AND) {

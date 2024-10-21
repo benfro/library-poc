@@ -1,6 +1,7 @@
 package net.benfro.library.bookhub.repository.rsql;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
@@ -14,28 +15,33 @@ public class SqlSpecification {
     private List<String> arguments;
 
     public String toPredicate() {
-        switch (RsqlSearchOperation.getSimpleOperator(operator)) {
-
-            case EQUAL -> {
-                if (arguments.size() == 1) {
-                    return String.format("%s like '%s'", property, arguments.getFirst().replace('*', '%'));
-                } else if (arguments.size() == 1 && arguments.contains("null")) {
-                    return property + " is null";
+        if (!arguments.isEmpty()) {
+            RsqlSearchOperation simpleOperator = RsqlSearchOperation.getSimpleOperator(operator);
+            return switch (Objects.nonNull(simpleOperator) ? simpleOperator : null) {
+                case EQUAL -> {
+                    if (arguments.getFirst().contains("*")) {
+                        yield String.format("%s like '%s'", property, arguments.getFirst().replace('*', '%'));
+                    }
+                    yield  String.format("%s = '%s'", property, arguments.getFirst());
                 }
-            }
-            case NOT_EQUAL -> {
-                if (arguments.size() == 1) {
-                    return String.format("%s not like '%s'", property, arguments.getFirst().replace('*', '%'));
-                } else if (arguments.size() == 1 && arguments.contains("null")) {
-                    return property + " is not null";
+                case NOT_EQUAL -> {
+                    if (arguments.getFirst().contains("*")) {
+                        yield  String.format("%s not like '%s'", property, arguments.getFirst().replace('*', '%'));
+                    }
+                    yield String.format("%s != '%s'", property, arguments.getFirst());
                 }
-            }
-            case GREATER_THAN -> String.format("%s > '%s'", property, arguments.getFirst());
-            case GREATER_THAN_OR_EQUAL ->  String.format("%s >= '%s'", property, arguments.getFirst());
-            case LESS_THAN -> String.format("%s < '%s'", property, arguments.getFirst());
-            case LESS_THAN_OR_EQUAL -> String.format("%s <= '%s'", property, arguments.getFirst());
-            case IN -> String.format("%s in (%s)", property, arguments.stream().map(String::trim).collect(Collectors.joining(", ")));
-            case NOT_IN -> String.format("%s not in (%s)", property, arguments.stream().map(String::trim).collect(Collectors.joining(", ")));
+                case GREATER_THAN -> String.format("%s > '%s'", property, arguments.getFirst());
+                case GREATER_THAN_OR_EQUAL -> String.format("%s >= '%s'", property, arguments.getFirst());
+                case LESS_THAN -> String.format("%s < '%s'", property, arguments.getFirst());
+                case LESS_THAN_OR_EQUAL -> String.format("%s <= '%s'", property, arguments.getFirst());
+                case IN -> String.format("%s in (%s)",
+                    property,
+                    arguments.stream().map(String::trim).collect(Collectors.joining(", ")));
+                case NOT_IN -> String.format("%s not in (%s)",
+                    property,
+                    arguments.stream().map(String::trim).collect(Collectors.joining(", ")));
+                case null -> throw new IllegalArgumentException("Operator is null");
+            };
         }
         return null;
     }
