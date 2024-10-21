@@ -1,22 +1,27 @@
 package net.benfro.library.bookhub.repository;
 
-import net.benfro.library.bookhub.DataGenerator;
-import net.benfro.library.bookhub.domain.Book;
-import net.benfro.library.bookhub.test.IntegrationTest;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
+import net.benfro.library.bookhub.DataGenerator;
+import net.benfro.library.bookhub.domain.Author;
+import net.benfro.library.bookhub.domain.Book;
+import net.benfro.library.bookhub.test.IntegrationTest;
 
 class BookRepositoryTest implements IntegrationTest {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private AuthorRepository authorRepository;
 
     @Autowired
     private ReactiveTransactionManager transactionManager;
@@ -53,15 +58,21 @@ class BookRepositoryTest implements IntegrationTest {
     @Test
     void getById_should_return_persisted_book() {
         // given
+
+        var authorId = authorRepository.reserveId().block();
+        var author = Author.builder().id(authorId).firstName("bu").lastName("bae").build();
+        authorRepository.persist(author)
+            .as(tx::transactional)
+            .block();
+
         var id = bookRepository.reserveId().block();
         var book = Book.builder()
             .id(id)
-            .payload(Book.Payload.builder()
-                .title("John")
-                .author("Doe")
-                .publisher("john.doe@example.com")
-                .isbn(DataGenerator.ISBN())
-                .build())
+            .title("John")
+            .author("Doe")
+            .publisher("john.doe@example.com")
+            .isbn(DataGenerator.ISBN())
+            .authorId(authorId)
             .build();
 
         // when
@@ -78,15 +89,21 @@ class BookRepositoryTest implements IntegrationTest {
     @Test
     void getByIds_should_return_persisted_books() {
         // given
+
+        var authorId = authorRepository.reserveId().block();
+        var author = Author.builder().id(authorId).firstName("bu").lastName("bae").build();
+        authorRepository.persist(author)
+            .as(tx::transactional)
+            .block();
+
         var id = bookRepository.reserveId().block();
         var book = Book.builder()
             .id(id)
-            .payload(Book.Payload.builder()
-                .title("John")
-                .author("Doe")
-                .publisher("john.doe@example.com")
-                .isbn(DataGenerator.ISBN())
-                .build())
+            .title("John")
+            .author("Doe")
+            .publisher("john.doe@example.com")
+            .isbn(DataGenerator.ISBN())
+            .authorId(authorId)
             .build();
 
         // when
@@ -116,15 +133,20 @@ class BookRepositoryTest implements IntegrationTest {
     @Test
     void findByISBN_should_return_matching_book() {
         // given
+        var authorId = authorRepository.reserveId().block();
+        var author = Author.builder().id(authorId).firstName("bu").lastName("bae").build();
+        authorRepository.persist(author)
+            .as(tx::transactional)
+            .block();
+
         String isbn = DataGenerator.ISBN();
         var book = Book.builder()
             .id(1234L)
-            .payload(Book.Payload.builder()
-                .title("John")
-                .author("Doe")
-                .publisher("john.doe@example.com")
-                .isbn(isbn)
-                .build())
+            .title("John")
+            .author("Doe")
+            .publisher("john.doe@example.com")
+            .isbn(isbn)
+            .authorId(authorId)
             .build();
 
         bookRepository.persist(book)
@@ -141,27 +163,31 @@ class BookRepositoryTest implements IntegrationTest {
     @Test
     void update_should_update_book() {
         // given
+        var authorId = authorRepository.reserveId().block();
+        var author = Author.builder().id(authorId).firstName("bu").lastName("bae").build();
+        authorRepository.persist(author)
+            .as(tx::transactional)
+            .block();
+
         var id = bookRepository.reserveId().block();
         bookRepository.persist(Book.builder()
                 .id(id)
-                .payload(Book.Payload.builder()
-                    .title("John")
-                    .author("Doe")
-                    .publisher("john.doe@example.com")
-                    .isbn(DataGenerator.ISBN())
-                    .build())
+                .title("John")
+                .author("Doe")
+                .publisher("john.doe@example.com")
+                .isbn(DataGenerator.ISBN())
+                .authorId(authorId)
                 .build())
             .as(tx::transactional)
             .block();
 
         var updatedBook = Book.builder()
             .id(id)
-            .payload(Book.Payload.builder()
-                .title("Johnny")
-                .author("Dough")
-                .publisher("johnny.dough@example.com")
-                .isbn(DataGenerator.ISBN())
-                .build())
+            .title("Johnny")
+            .author("Dough")
+            .publisher("johnny.dough@example.com")
+            .isbn(DataGenerator.ISBN())
+            .authorId(authorId)
             .build();
 
         // when

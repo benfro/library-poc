@@ -35,7 +35,7 @@ public class AuthorRepository {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public Mono<Void> persist(Author author) {
-        Validate.notNull(author, "book can't be null");
+        Validate.notNull(author, "author can't be null");
 
         return db.sql(sql.insert())
                 .bind("id", author.getId())
@@ -46,7 +46,7 @@ public class AuthorRepository {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public Mono<Void> update(Author author) {
-        Validate.notNull(author, "Book can't be null");
+        Validate.notNull(author, "Author can't be null");
 
         return db.sql(sql.update())
                 .bind("id", author.getId())
@@ -57,7 +57,7 @@ public class AuthorRepository {
 
     /**
      * Get all books.
-     * @return A {@link Flux} of all books.
+     * @return A {@link Flux} of all Authors.
      */
     public Flux<Author> all() {
         return db.sql(sql.selectAll())

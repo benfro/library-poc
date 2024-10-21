@@ -1,4 +1,4 @@
-package net.benfro.library.bookhub.domain;
+package net.benfro.library.bookhub.repository;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 @Builder
-public class Book {
+public class DbBook {
 
     private Long id;
     private String title;
@@ -17,7 +17,5 @@ public class Book {
     private String isbn;
     @JsonProperty("author_id")
     @Builder.Default
-    private Long authorId = -1L;
-
-
+    private Long author_id = -1L;
 }

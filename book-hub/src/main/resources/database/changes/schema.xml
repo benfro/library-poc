@@ -37,4 +37,15 @@
         </createTable>
         <createSequence sequenceName="author_id_seq" startValue="1000" incrementBy="1"/>
     </changeSet>
+    <changeSet id="BOOK-4" author="benfro">
+        <addColumn tableName="book">
+            <column name="author_id" type="BIGINT" defaultOnNull="true">
+                <constraints foreignKeyName="author_fk"
+                             references="author(id)"
+                             nullable="true"
+                             initiallyDeferred="true"
+                             />
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
