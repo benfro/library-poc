@@ -1,11 +1,11 @@
-package net.benfro.library.bookhub.repository.rsql;
+package net.benfro.library.commons.rsql;
+
+import cz.jirutka.rsql.parser.ast.ComparisonOperator;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import cz.jirutka.rsql.parser.ast.ComparisonOperator;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class SqlSpecification {

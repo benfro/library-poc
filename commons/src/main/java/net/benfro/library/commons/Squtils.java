@@ -1,4 +1,4 @@
-package net.benfro.library.bookhub.repository.sql;
+package net.benfro.library.commons;
 
 import org.apache.commons.text.StringSubstitutor;
 import org.jetbrains.annotations.NotNull;

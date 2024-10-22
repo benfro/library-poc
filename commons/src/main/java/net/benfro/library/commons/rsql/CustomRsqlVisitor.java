@@ -1,4 +1,4 @@
-package net.benfro.library.bookhub.repository.rsql;
+package net.benfro.library.commons.rsql;
 
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;

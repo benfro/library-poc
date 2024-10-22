@@ -1,14 +1,13 @@
-package net.benfro.library.bookhub.repository.rsql;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+package net.benfro.library.commons.rsql;
 
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.LogicalNode;
 import cz.jirutka.rsql.parser.ast.LogicalOperator;
 import cz.jirutka.rsql.parser.ast.Node;
+
+import java.util.List;
+import java.util.Objects;
 
 public class SqlSpecificationBuilder {
 

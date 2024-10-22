@@ -1,4 +1,4 @@
-package net.benfro.library.bookhub.repository.sql;
+package net.benfro.library.commons;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,4 +55,5 @@ class SqutilsTest {
         assertEquals("delete from book where field1=:field1", instance.deleteByField("field1"));
         assertEquals("delete from book where field1=:field1", instance.deleteByField("  field1 "));
     }
+
 }
