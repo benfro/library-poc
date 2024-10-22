@@ -3,6 +3,7 @@ package net.benfro.library.userhub.repository;
 import java.util.List;
 import java.util.function.Function;
 
+import net.benfro.library.commons.Squtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.r2dbc.core.DatabaseClient;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import io.r2dbc.spi.Readable;
 import net.benfro.library.userhub.model.Person;
 import net.benfro.library.userhub.repository.sql.PersonQueries;
-import net.benfro.library.userhub.repository.sql.Squtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
