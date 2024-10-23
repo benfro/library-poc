@@ -7,7 +7,7 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 
 public class CustomRsqlVisitor implements RSQLVisitor<String, Void> {
 
-    private SqlSpecificationBuilder builder;
+    private final SqlSpecificationBuilder builder;
 
     public CustomRsqlVisitor() {
         builder = new SqlSpecificationBuilder();

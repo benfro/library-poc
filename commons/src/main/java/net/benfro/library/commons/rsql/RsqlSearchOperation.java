@@ -3,7 +3,9 @@ package net.benfro.library.commons.rsql;
 import cz.jirutka.rsql.parser.ast.ComparisonOperator;
 import cz.jirutka.rsql.parser.ast.RSQLOperators;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public enum RsqlSearchOperation {
     EQUAL(RSQLOperators.EQUAL),
     NOT_EQUAL(RSQLOperators.NOT_EQUAL),
@@ -15,11 +17,7 @@ public enum RsqlSearchOperation {
     NOT_IN(RSQLOperators.NOT_IN);
 
     @Getter
-    private ComparisonOperator operator;
-
-    private RsqlSearchOperation(ComparisonOperator operator) {
-        this.operator = operator;
-    }
+    private final ComparisonOperator operator;
 
     public static RsqlSearchOperation getSimpleOperator(ComparisonOperator operator) {
         for (RsqlSearchOperation operation : values()) {

@@ -11,38 +11,41 @@ class SqutilsTest {
 
     @BeforeEach
     void setUp() {
-        instance = new Squtils("book", "id", "  field1,   field2");
+        instance = new Squtils("book",
+                FieldInfo.ofLong("id"),
+                FieldInfo.ofString("stringField"),
+                FieldInfo.ofInt("intField"));
     }
 
     @Test
     void insert() {
-        assertEquals("insert into book (id, field1, field2) values (:id, :field1, :field2)", instance.insert());
+        assertEquals("insert into book (id, stringField, intField) values (:id, :stringField, :intField)", instance.insert());
     }
 
     @Test
     void update() {
-        assertEquals("update book set field1=:field1, field2=:field2 where id=:id", instance.update());
+        assertEquals("update book set stringField=:stringField, intField=:intField where id=:id", instance.update());
     }
 
     @Test
     void selectAll() {
-        assertEquals("select id, field1, field2 from book", instance.selectAll());
+        assertEquals("select id, stringField, intField from book", instance.selectAll());
     }
 
     @Test
     void selectById() {
-        assertEquals("select id, field1, field2 from book where id=:id", instance.selectById());
+        assertEquals("select id, stringField, intField from book where id=:id", instance.selectById());
     }
 
     @Test
     void selectByIds() {
-        assertEquals("select id, field1, field2 from book where id in (:ids)", instance.selectByIds());
+        assertEquals("select id, stringField, intField from book where id in (:ids)", instance.selectByIds());
     }
 
     @Test
     void selectAllWhere() {
-        assertEquals("select id, field1, field2 from book where field2=:field2", instance.selectAllWhere("field2"));
-        assertEquals("select id, field1, field2 from book where field2=:field2", instance.selectAllWhere("  field2 "));
+        assertEquals("select id, stringField, intField from book where intField=:intField", instance.selectAllWhere("intField"));
+        assertEquals("select id, stringField, intField from book where intField=:intField", instance.selectAllWhere("  intField "));
     }
 
     @Test
@@ -52,8 +55,9 @@ class SqutilsTest {
 
     @Test
     void deleteByFieldField() {
-        assertEquals("delete from book where field1=:field1", instance.deleteByField("field1"));
-        assertEquals("delete from book where field1=:field1", instance.deleteByField("  field1 "));
+        assertEquals("delete from book where stringField=':stringField'", instance.deleteByField("stringField"));
+        assertEquals("delete from book where stringField=':stringField'", instance.deleteByField("  stringField "));
+        assertEquals("delete from book where intField=:intField", instance.deleteByField("  intField "));
     }
 
 }
