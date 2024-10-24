@@ -15,6 +15,7 @@ public class Book {
     private String author;
     private String publisher;
     private String isbn;
+    private String publishYear;
     @JsonProperty("author_id")
     @Builder.Default
     private Long authorId = -1L;
