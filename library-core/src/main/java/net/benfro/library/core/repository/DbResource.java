@@ -1,10 +1,12 @@
 package net.benfro.library.core.repository;
 
-import java.util.UUID;
 
 import lombok.Data;
-import net.benfro.library.core.domain.Resource;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Data
 public class DbResource {
     private Long id;

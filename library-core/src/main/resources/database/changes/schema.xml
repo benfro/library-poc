@@ -13,18 +13,12 @@
         </preConditions>
         <sql>CREATE DATABASE library_db;</sql>
     </changeSet>
-<!--    <changeSet id="core-2" author="benfro">-->
-<!--        <createTable tableName="book">-->
-<!--            <column name="id" type="SERIAL">-->
-<!--                <constraints primaryKey="true" primaryKeyName="book_pk"/>-->
-<!--            </column>-->
-<!--            <column name="title" type="TEXT"/>-->
-<!--            <column name="author" type="TEXT"/>-->
-<!--            <column name="publisher" type="TEXT"/>-->
-<!--            <column name="isbn" type="TEXT">-->
-<!--                <constraints unique="true" uniqueConstraintName="book_isbn_unique" />-->
-<!--            </column>-->
-<!--        </createTable>-->
-<!--        <createSequence sequenceName="book_id_seq" startValue="1000" incrementBy="1"/>-->
-<!--    </changeSet>-->
+    <changeSet id="core-2" author="benfro">
+        <createTable tableName="borrower">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="borrower_pk"/>
+            </column>
+            <column name="borrower_id" type="uuid"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

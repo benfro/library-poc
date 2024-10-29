@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.UUID;
 
 import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class Resource {
 
     @Getter

@@ -29,5 +29,4 @@ public interface LoanMapper {
     @Mapping(source = "type", target = "type", qualifiedByName = "fromValue")
     Loan toLoan(DbLoan loan);
 
-
 }
