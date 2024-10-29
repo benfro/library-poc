@@ -3,6 +3,7 @@ package net.benfro.library.bookhub.repository;
 import io.r2dbc.spi.Readable;
 import net.benfro.library.bookhub.domain.Author;
 import net.benfro.library.bookhub.repository.sql.AuthorQueries;
+import net.benfro.library.commons.FieldInfo;
 import net.benfro.library.commons.Squtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,11 @@ import java.util.function.Function;
 @Repository
 public class AuthorRepository {
 
-    private final Squtils sql = new Squtils("author", "id", "first_name, last_name");
+    private final Squtils sql = new Squtils("author",
+            FieldInfo.ofLong("id"),
+            FieldInfo.ofString("first_name"),
+            FieldInfo.ofString("last_name"));
+
     private final DatabaseClient db;
 
     @Autowired
@@ -64,14 +69,6 @@ public class AuthorRepository {
                 .map(rowToAuthor())
                 .all();
     }
-
-//    public Mono<Author> findByISBN(String isbn) {
-//        Validate.notEmpty(isbn, "ISBN can't be null or empty");
-//        return db.sql(sql.selectAllWhere("isbn"))
-//                .bind("isbn", isbn)
-//                .map(rowToBook())
-//                .one();
-//    }
 
     public Mono<Author> getById(Long id) {
         Validate.notNull(id, "id can't be null");
