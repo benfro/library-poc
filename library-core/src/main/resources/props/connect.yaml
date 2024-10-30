@@ -1,5 +1,0 @@
-library:
-  connect:
-    user-app.port: 8000
-    someApp:
-      port: 9000

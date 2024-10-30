@@ -1,0 +1,37 @@
+spring:
+  profiles: dev
+  application:
+    name: library-core
+  r2sbc:
+    url: r2dbc:pool:postgresql://localhost:5432/library_db
+  liquibase:
+    change-log: classpath:database/changelog.xml
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: library-group
+      auto-offset-reset: earliest
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        "group.instance.id": "1"
+        "spring.json.trusted.packages": "net.benfro.lab.reactive_kafka.sec17_integration_tests.consumer"
+
+server:
+  port: 9898
+
+database:
+  host: localhost
+  port: 5432
+  name: library_db
+  user: postgres
+  password: postgres
+
+---
+
+
+
