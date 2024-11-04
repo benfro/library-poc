@@ -1,5 +1,4 @@
 spring:
-  profiles: dev
   application:
     name: library-core
   r2sbc:
@@ -20,6 +19,8 @@ spring:
       properties:
         "group.instance.id": "1"
         "spring.json.trusted.packages": "net.benfro.lab.reactive_kafka.sec17_integration_tests.consumer"
+  profiles:
+    active: dev
 
 server:
   port: 9898
