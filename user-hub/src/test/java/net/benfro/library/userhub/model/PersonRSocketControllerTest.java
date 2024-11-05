@@ -3,6 +3,7 @@ package net.benfro.library.userhub.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,11 @@ class PersonRSocketControllerTest implements IntegrationTest {
             .block();
     }
 
+    @AfterAll
+    public static void tearDownOnce() {
+        requester.rsocket().dispose();
+    }
+
     @Autowired
     PersonRepository personRepository;
 
@@ -49,7 +55,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
 
     //    @Transactional
     @Test
-    void testRequestGetsResponse() {
+    void findPersonById_path_should_return_a_person() {
 
         Long id = personRepository.reserveId().block();
         var p = Person.builder()
@@ -83,7 +89,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
 
     @Test
 //    @Transactional
-    void testUpdate() {
+    void updatePerson_path_should_update_the_person() {
         // Given
         Long id = personRepository.reserveId().block();
         var p = Person.builder()
@@ -122,7 +128,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
     }
 
     @Test
-    void testPersistNewPerson() {
+    void createPerson_path_should_create_a_person() {
         // Given
         var personRequest = PersonRequest.builder()
                 .firstName("Per")
@@ -138,13 +144,12 @@ class PersonRSocketControllerTest implements IntegrationTest {
 
         // Then: Verify that the response message contains the expected data (2)
         StepVerifier.create(result)
-//                .expectNext(i -> i instanceof Void)
                 .verifyComplete();
 
         var persons =  personRepository.all().as(tx::transactional).collectList().block();
 
         assertEquals(1, persons.size());
-//        assertEquals("Pelle", persons.get(0).getPayload().getFirstName());
-//        assertNotNull(persons.get(0).getPayload().getPersonId());
+        assertEquals("Per", persons.get(0).getPayload().getFirstName());
+        assertNotNull(persons.get(0).getPayload().getPersonId());
     }
 }
