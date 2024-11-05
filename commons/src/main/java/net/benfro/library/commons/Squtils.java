@@ -40,6 +40,7 @@ public class Squtils {
     }
 
     private static final String INSERT = "insert into ${table} (${id}, ${fields}) values (${param_id}, ${params_fields})";
+    private static final String INSERT_NO_ID = "insert into ${table} (${fields}) values (${params_fields})";
     private static final String UPDATE = "update ${table} set ${update_params_fields} where ${id}=${param_id}";
     private static final String SELECT_ALL = "select ${id}, ${fields} from ${table}";
     private static final String SELECT_BY_ID = SELECT_ALL + " where ${id}=${param_id}";
@@ -98,6 +99,10 @@ public class Squtils {
 
     public String insert() {
         return sub.replace(INSERT);
+    }
+
+    public String insertNoId() {
+        return sub.replace(INSERT_NO_ID);
     }
 
     public String update() {
