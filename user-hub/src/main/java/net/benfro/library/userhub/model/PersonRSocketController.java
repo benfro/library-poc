@@ -39,14 +39,11 @@ public class PersonRSocketController {
 
     @Transactional
     @MessageMapping("createPerson")
-    public Mono<Void> createPerson(PersonRequest request) {
-        return personRepository.reserveId()
-                .zipWith(Mono.just(request))
-                .map(tuple -> tuple.getT2().withId(tuple.getT1()))
+    public Mono<Long> createPerson(PersonRequest request) {
+        return Mono.just(request)
                 .map(pr -> PersonConverter.INSTANCE.personRequestToPerson(pr))
                 .flatMap(p -> personRepository.persist(p))
-                .doOnError(e -> log.error("there was an error: {}", e.getMessage()))
-                .then();
+                .doOnError(e -> log.error("there was an error: {}", e.getMessage()));
     }
 
 }

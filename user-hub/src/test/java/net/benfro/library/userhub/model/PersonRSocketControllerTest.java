@@ -53,13 +53,10 @@ class PersonRSocketControllerTest implements IntegrationTest {
         tx = TransactionalOperator.create(transactionManager);
     }
 
-    //    @Transactional
     @Test
     void findPersonById_path_should_return_a_person() {
 
-        Long id = personRepository.reserveId().block();
         var p = Person.builder()
-            .id(id)
             .payload(Person.Payload.builder()
                 .firstName("Per")
                 .lastName("andersson")
@@ -67,12 +64,12 @@ class PersonRSocketControllerTest implements IntegrationTest {
                 .build())
             .build();
 
-        personRepository.persist(p)
+        var generatedId = personRepository.persist(p)
             .as(tx::transactional)
             .block();
 
         // Send a request message (1)
-        PersonRequest data = new PersonRequest().withId(id);
+        PersonRequest data = new PersonRequest().withId(generatedId);
         Mono<PersonResponse> result = requester
             .route("findPersonById")
             .data(data)
@@ -91,9 +88,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
 //    @Transactional
     void updatePerson_path_should_update_the_person() {
         // Given
-        Long id = personRepository.reserveId().block();
         var p = Person.builder()
-            .id(id)
             .payload(Person.Payload.builder()
                 .firstName("Per")
                 .lastName("andersson")
@@ -101,11 +96,11 @@ class PersonRSocketControllerTest implements IntegrationTest {
                 .build())
             .build();
 
-        personRepository.persist(p)
+        var generatedId = personRepository.persist(p)
             .as(tx::transactional)
             .block();
 
-        Person person = personRepository.getById(id)
+        Person person = personRepository.getById(generatedId)
             .as(tx::transactional)
             .block();
 
@@ -122,7 +117,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
             .create(result)
             .verifyComplete();
 
-        Person savedBlock = personRepository.getById(id)
+        Person savedBlock = personRepository.getById(generatedId)
             .block();
         assertEquals("PELLE", savedBlock.getPayload().getFirstName());
     }
@@ -131,25 +126,24 @@ class PersonRSocketControllerTest implements IntegrationTest {
     void createPerson_path_should_create_a_person() {
         // Given
         var personRequest = PersonRequest.builder()
-                .firstName("Per")
-                .lastName("andersson")
-                .email("per@pandersson.com")
-                .build();
+            .firstName("Per")
+            .lastName("andersson")
+            .email("per@pandersson.com")
+            .build();
 
         // When: Send a request message (1)
-        Mono<Void> result = requester
-                .route("createPerson")
-                .data(personRequest)
-                .retrieveMono(Void.class);
+        Mono<Long> result = requester
+            .route("createPerson")
+            .data(personRequest)
+            .retrieveMono(Long.class);
 
         // Then: Verify that the response message contains the expected data (2)
         StepVerifier.create(result)
-                .verifyComplete();
+            .expectNextMatches(id -> id > 0)
+            .verifyComplete();
 
-        var persons =  personRepository.all().as(tx::transactional).collectList().block();
-
-        assertEquals(1, persons.size());
-        assertEquals("Per", persons.get(0).getPayload().getFirstName());
-        assertNotNull(persons.get(0).getPayload().getPersonId());
+        var person = personRepository.getById(result.block()).as(tx::transactional).block();
+        assertEquals("Per", person.getPayload().getFirstName());
+        assertNotNull(person.getPayload().getPersonId());
     }
 }

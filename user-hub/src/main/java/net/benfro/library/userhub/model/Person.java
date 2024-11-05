@@ -19,6 +19,7 @@ public class Person {
 
     private Long id;
 
+    @With
     private Payload payload;
 
     @Builder
