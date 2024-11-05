@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: user-hub
+  rsocket:
+    server:
+      port: 7088
+  r2dbc:
+    url: r2dbc:pool:postgresql://localhost:5432/user_service
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+database:
+  host: localhost
+  port: 5432
+  name: postgres
+  user: postgres
+  password: postgres

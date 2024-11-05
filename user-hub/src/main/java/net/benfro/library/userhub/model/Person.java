@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.With;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @Data
 @Builder
@@ -23,7 +25,8 @@ public class Person {
     public record Payload(
         @With @Getter String firstName,
         @With @Getter String lastName,
-        @With @Getter String email
+        @With @Getter String email,
+        @With @Getter UUID personId
     ) {
 
     }

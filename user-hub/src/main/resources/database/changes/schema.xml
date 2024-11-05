@@ -28,4 +28,9 @@
         </createTable>
         <createSequence sequenceName="person_id_seq" startValue="1000" incrementBy="1"/>
     </changeSet>
+    <changeSet id="USER-3" author="benfro">
+        <addColumn tableName="person">
+            <column name="person_id" type="uuid" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

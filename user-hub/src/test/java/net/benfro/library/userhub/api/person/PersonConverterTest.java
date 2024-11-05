@@ -1,11 +1,13 @@
 package net.benfro.library.userhub.api.person;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import net.benfro.library.userhub.model.Person;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import net.benfro.library.userhub.model.Person;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PersonConverterTest {
 
@@ -14,16 +16,19 @@ class PersonConverterTest {
 
     @BeforeEach
     void setUp() {
-        person = Person.builder()
-            .id(1L)
-            .payload(Person.Payload.builder()
-                .firstName("John")
-                .lastName("the Baptist")
-                .email("john@saint.com")
-                .build())
-            .build();
+        var uuid = UUID.randomUUID();
 
-        request = new PersonRequest(1L, "John", "the Baptist", "john@saint.com");
+        person = Person.builder()
+                .id(1L)
+                .payload(Person.Payload.builder()
+                        .firstName("John")
+                        .lastName("the Baptist")
+                        .email("john@saint.com")
+                        .personId(uuid)
+                        .build())
+                .build();
+
+        request = new PersonRequest(1L, "John", "the Baptist", "john@saint.com", uuid);
     }
 
     @Test
@@ -31,10 +36,10 @@ class PersonConverterTest {
         Person result = PersonConverter.INSTANCE.personRequestToPerson(request);
 
         assertAll("All",
-            () -> assertEquals(1L, result.getId()),
-            () -> assertEquals("John", result.getPayload().getFirstName()),
-            () -> assertEquals("the Baptist", result.getPayload().getLastName()),
-            () -> assertEquals("john@saint.com", result.getPayload().getEmail())
+                () -> assertEquals(1L, result.getId()),
+                () -> assertEquals("John", result.getPayload().getFirstName()),
+                () -> assertEquals("the Baptist", result.getPayload().getLastName()),
+                () -> assertEquals("john@saint.com", result.getPayload().getEmail())
         );
 
     }
@@ -44,10 +49,10 @@ class PersonConverterTest {
         PersonRequest result = PersonConverter.INSTANCE.personToPersonRequest(person);
 
         assertAll("All",
-            () -> assertEquals(1L, result.getId()),
-            () -> assertEquals("John", result.getFirstName()),
-            () -> assertEquals("the Baptist", result.getLastName()),
-            () -> assertEquals("john@saint.com", result.getEmail())
+                () -> assertEquals(1L, result.getId()),
+                () -> assertEquals("John", result.getFirstName()),
+                () -> assertEquals("the Baptist", result.getLastName()),
+                () -> assertEquals("john@saint.com", result.getEmail())
         );
     }
 
@@ -56,10 +61,10 @@ class PersonConverterTest {
         PersonResponse result = PersonConverter.INSTANCE.personToPersonResponse(person);
 
         assertAll("All",
-            () -> assertEquals(1L, result.getId()),
-            () -> assertEquals("John", result.getFirstName()),
-            () -> assertEquals("the Baptist", result.getLastName()),
-            () -> assertEquals("john@saint.com", result.getEmail())
+                () -> assertEquals(1L, result.getId()),
+                () -> assertEquals("John", result.getFirstName()),
+                () -> assertEquals("the Baptist", result.getLastName()),
+                () -> assertEquals("john@saint.com", result.getEmail())
         );
     }
 
@@ -69,10 +74,10 @@ class PersonConverterTest {
         PersonConverter.INSTANCE.updatePersonInstance(request, person);
 
         assertAll("All",
-            () -> assertEquals(1L, person.getId()),
-            () -> assertEquals("Holy Johnny", person.getPayload().getFirstName()),
-            () -> assertEquals("the Baptist", person.getPayload().getLastName()),
-            () -> assertEquals("john@saint.com", person.getPayload().getEmail())
+                () -> assertEquals(1L, person.getId()),
+                () -> assertEquals("Holy Johnny", person.getPayload().getFirstName()),
+                () -> assertEquals("the Baptist", person.getPayload().getLastName()),
+                () -> assertEquals("john@saint.com", person.getPayload().getEmail())
         );
     }
 }
