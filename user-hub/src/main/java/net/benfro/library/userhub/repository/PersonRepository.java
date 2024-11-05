@@ -37,7 +37,7 @@ public class PersonRepository {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public Mono<Void> persist(Person person) {
-        Validate.notNull(person, "book can't be null");
+        Validate.notNull(person, "Person can't be null");
 
         final Long id = person.getId();
 
@@ -48,13 +48,12 @@ public class PersonRepository {
                 .bind("email", person.getPayload().email())
                 .bind("person_id", Objects.isNull(person.getPayload().personId()) ? UUID.randomUUID() : person.getPayload().personId())
                 .then();
-//        return getById(id);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public Mono<Void> update(Person person) {
-        Validate.notNull(person, "Book can't be null");
-        // TODO Update should not include non-updateable fields
+        Validate.notNull(person, "Person can't be null");
+        // TODO Update should not include non-updatable fields
         return db.sql(sql.update())
                 .bind("id", person.getId())
                 .bind("first_name", person.getPayload().firstName())
@@ -78,8 +77,15 @@ public class PersonRepository {
     public Mono<Person> findByEmail(String email) {
         Validate.notEmpty(email, "Email can't be null or empty");
         return db.sql(sql.selectAllWhere("email"))
-//        return db.sql(BookQueries.SELECT_BY_ISBN)
                 .bind("email", email)
+                .map(rowToPerson())
+                .one();
+    }
+
+    public Mono<Person> findByPersonId(String personId) {
+        Validate.notEmpty(personId, "Person ID can't be null or empty");
+        return db.sql(sql.selectAllWhere("person_id"))
+                .bind("person_id", personId)
                 .map(rowToPerson())
                 .one();
     }

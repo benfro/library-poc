@@ -1,6 +1,7 @@
 package net.benfro.library.userhub.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,7 +84,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
     @Test
 //    @Transactional
     void testUpdate() {
-
+        // Given
         Long id = personRepository.reserveId().block();
         var p = Person.builder()
             .id(id)
@@ -104,13 +105,13 @@ class PersonRSocketControllerTest implements IntegrationTest {
 
         PersonRequest data = PersonConverter.INSTANCE.personToPersonRequest(person);
         data.setFirstName("PELLE");
-        // Send a request message (1)
+        // When: Send a request message (1)
         Mono<Void> result = requester
             .route("updatePerson")
             .data(data)
             .retrieveMono(Void.class);
 
-        // Verify that the response message contains the expected data (2)
+        // Then: Verify that the response message contains the expected data (2)
         StepVerifier
             .create(result)
             .verifyComplete();
@@ -120,4 +121,30 @@ class PersonRSocketControllerTest implements IntegrationTest {
         assertEquals("PELLE", savedBlock.getPayload().getFirstName());
     }
 
+    @Test
+    void testPersistNewPerson() {
+        // Given
+        var personRequest = PersonRequest.builder()
+                .firstName("Per")
+                .lastName("andersson")
+                .email("per@pandersson.com")
+                .build();
+
+        // When: Send a request message (1)
+        Mono<Void> result = requester
+                .route("createPerson")
+                .data(personRequest)
+                .retrieveMono(Void.class);
+
+        // Then: Verify that the response message contains the expected data (2)
+        StepVerifier.create(result)
+//                .expectNext(i -> i instanceof Void)
+                .verifyComplete();
+
+        var persons =  personRepository.all().as(tx::transactional).collectList().block();
+
+        assertEquals(1, persons.size());
+//        assertEquals("Pelle", persons.get(0).getPayload().getFirstName());
+//        assertNotNull(persons.get(0).getPayload().getPersonId());
+    }
 }

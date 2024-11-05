@@ -1,15 +1,14 @@
 package net.benfro.library.userhub.model;
 
 import lombok.extern.slf4j.Slf4j;
+import net.benfro.library.userhub.api.person.PersonConverter;
+import net.benfro.library.userhub.api.person.PersonRequest;
+import net.benfro.library.userhub.api.person.PersonResponse;
 import net.benfro.library.userhub.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-
-import net.benfro.library.userhub.api.person.PersonConverter;
-import net.benfro.library.userhub.api.person.PersonRequest;
-import net.benfro.library.userhub.api.person.PersonResponse;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -32,18 +31,22 @@ public class PersonRSocketController {
     @MessageMapping("updatePerson")
     public Mono<Void> updatePerson(PersonRequest request) {
         return personRepository.getById(request.getId())
-            .switchIfEmpty(Mono.error(new RuntimeException("Person not found")))
-            .map(person -> PersonConverter.INSTANCE.updatePersonInstance(request, person))
-            .flatMap(person -> personRepository.update(person))
-            .then();
+                .switchIfEmpty(Mono.error(new RuntimeException("Person not found")))
+                .map(person -> PersonConverter.INSTANCE.updatePersonInstance(request, person))
+                .flatMap(person -> personRepository.update(person))
+                .then();
     }
 
-//    @Transactional
-//    Mono<Book> save(Book book){
-//        return repository.findByIsbn(book.getIsbn())
-//            .flatMap(found -> repository.save(found.copyMutableValuesFrom(book)))
-//            .switchIfEmpty(repository.save(book));
-//    }
-
+    @Transactional
+    @MessageMapping("createPerson")
+    public Mono<Void> createPerson(PersonRequest request) {
+        return personRepository.reserveId()
+                .zipWith(Mono.just(request))
+                .map(tuple -> tuple.getT2().withId(tuple.getT1()))
+                .map(pr -> PersonConverter.INSTANCE.personRequestToPerson(pr))
+                .flatMap(p -> personRepository.persist(p))
+                .doOnError(e -> log.error("there was an error: {}", e.getMessage()))
+                .then();
+    }
 
 }
