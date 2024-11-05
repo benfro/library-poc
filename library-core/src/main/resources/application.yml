@@ -1,7 +1,7 @@
 spring:
   application:
     name: library-core
-  r2sbc:
+  r2dbc:
     url: r2dbc:pool:postgresql://localhost:5432/library_db
   liquibase:
     change-log: classpath:database/changelog.xml
@@ -21,6 +21,9 @@ spring:
         "spring.json.trusted.packages": "net.benfro.lab.reactive_kafka.sec17_integration_tests.consumer"
   profiles:
     active: dev
+  rsocket:
+    server:
+      port: 7088
 
 server:
   port: 9898
