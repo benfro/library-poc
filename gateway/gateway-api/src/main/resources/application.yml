@@ -1,0 +1,6 @@
+spring:
+  rsocket:
+    server:
+      port: 7060
+  application:
+    name: gateway-api
