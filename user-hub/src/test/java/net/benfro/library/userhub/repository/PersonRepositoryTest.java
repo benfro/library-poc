@@ -7,12 +7,14 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
 import net.benfro.library.userhub.model.Person;
-import net.benfro.library.userhub.test.IntegrationTest;
+import net.benfro.library.userhub.IntegrationTest;
 
+//@SpringBootTest
 class PersonRepositoryTest implements IntegrationTest {
 
     @Autowired

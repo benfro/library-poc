@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.test;
+package net.benfro.library.userhub;
 
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

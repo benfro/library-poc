@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Import;
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest
 @Disabled
-class UserHubApplicationTests {
+class UserHubApplicationTests { //extends AbstractKafkaIT {
 
     @Test
-    void contextLoads() {
+    void userEventTest() {
     }
 
 }

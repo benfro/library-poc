@@ -1,9 +1,10 @@
-package net.benfro.library.userhub.model;
+package net.benfro.library.userhub.api.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +15,9 @@ import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
 import lombok.extern.slf4j.Slf4j;
-import net.benfro.library.userhub.api.person.PersonConverter;
-import net.benfro.library.userhub.api.person.PersonRequest;
-import net.benfro.library.userhub.api.person.PersonResponse;
+import net.benfro.library.userhub.model.Person;
 import net.benfro.library.userhub.repository.PersonRepository;
-import net.benfro.library.userhub.test.IntegrationTest;
+import net.benfro.library.userhub.IntegrationTest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -29,7 +28,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
 
     @BeforeAll
     public static void setupOnce(@Autowired RSocketRequester.Builder builder,
-                                 @Value("${spring.rsocket.server.port}") Integer port) {
+                                 @Value("${spring.rsocket.server.port:7088}") Integer port) {
         requester = builder
             .connectTcp("localhost", port)
             .block();
@@ -52,6 +51,9 @@ class PersonRSocketControllerTest implements IntegrationTest {
     void setup() {
         tx = TransactionalOperator.create(transactionManager);
     }
+
+    @AfterEach
+    void tearDown() {tx = null;}
 
     @Test
     void findPersonById_path_should_return_a_person() {

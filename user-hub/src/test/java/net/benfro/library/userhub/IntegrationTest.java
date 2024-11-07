@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.test;
+package net.benfro.library.userhub;
 
 import java.util.Map;
 
@@ -16,18 +16,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.MapPropertySource;
 //import org.springframework.kafka.test.EmbeddedKafkaBroker;
 //import org.springframework.kafka.test.EmbeddedKafkaZKBroker;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import liquibase.integration.spring.SpringLiquibase;
-import net.benfro.library.userhub.UserHubApplication;
 
 @SpringBootTest(classes = {UserHubApplication.class, IntegrationTest.TestConfig.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//properties = "spring.main.web-application-type=reactive"
+)
 @ContextConfiguration(initializers = IntegrationTest.Initializer.class)
-@ExtendWith(ResetExtension.class)
+@ExtendWith( ResetExtension.class )
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public interface IntegrationTest {
 
     class ServiceConfig {
