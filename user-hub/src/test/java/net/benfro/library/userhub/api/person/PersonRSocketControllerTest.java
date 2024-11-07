@@ -3,6 +3,7 @@ package net.benfro.library.userhub.api.person;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,6 +22,9 @@ import net.benfro.library.userhub.IntegrationTest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+/**
+ * Integration test
+ */
 @Slf4j
 class PersonRSocketControllerTest implements IntegrationTest {
 
@@ -58,17 +62,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
     @Test
     void findPersonById_path_should_return_a_person() {
 
-        var p = Person.builder()
-            .payload(Person.Payload.builder()
-                .firstName("Per")
-                .lastName("andersson")
-                .email("per@pandersson.com")
-                .build())
-            .build();
-
-        var generatedId = personRepository.persist(p)
-            .as(tx::transactional)
-            .block();
+        var generatedId = saveAndReturnId();
 
         // Send a request message (1)
         PersonRequest data = new PersonRequest().withId(generatedId);
@@ -86,21 +80,13 @@ class PersonRSocketControllerTest implements IntegrationTest {
             .verifyComplete();
     }
 
+
+
     @Test
 //    @Transactional
     void updatePerson_path_should_update_the_person() {
         // Given
-        var p = Person.builder()
-            .payload(Person.Payload.builder()
-                .firstName("Per")
-                .lastName("andersson")
-                .email("per@pandersson.com")
-                .build())
-            .build();
-
-        var generatedId = personRepository.persist(p)
-            .as(tx::transactional)
-            .block();
+        var generatedId = saveAndReturnId();
 
         Person person = personRepository.getById(generatedId)
             .as(tx::transactional)
@@ -147,5 +133,20 @@ class PersonRSocketControllerTest implements IntegrationTest {
         var person = personRepository.getById(result.block()).as(tx::transactional).block();
         assertEquals("Per", person.getPayload().getFirstName());
         assertNotNull(person.getPayload().getPersonId());
+    }
+
+    private @Nullable Long saveAndReturnId() {
+        var p = Person.builder()
+            .payload(Person.Payload.builder()
+                .firstName("Per")
+                .lastName("andersson")
+                .email("per@pandersson.com")
+                .build())
+            .build();
+
+        var generatedId = personRepository.persist(p)
+            .as(tx::transactional)
+            .block();
+        return generatedId;
     }
 }
