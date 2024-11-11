@@ -13,16 +13,19 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.rsocket.context.RSocketServerBootstrap;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import net.benfro.library.userhub.message.UserEventKafkaProducer;
 import net.benfro.library.userhub.message.UserEventMapper;
 import net.benfro.library.userhub.model.Person;
+import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class UserApplicationEventListenerTest {
 
     @Autowired
@@ -30,6 +33,9 @@ class UserApplicationEventListenerTest {
 
     @MockBean
     UserEventKafkaProducer producer;
+
+    @MockBean
+    RSocketServerBootstrap rSocketServerBootstrap;
 
     @Test
     void test_application_event_is_received_and_kafka_producer_sends_message() {

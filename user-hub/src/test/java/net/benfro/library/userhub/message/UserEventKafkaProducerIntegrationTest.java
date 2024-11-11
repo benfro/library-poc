@@ -8,12 +8,14 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.rsocket.context.RSocketServerBootstrap;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import net.benfro.library.userhub.AbstractKafkaIT;
 import net.benfro.library.userhub.event.UserApplicationEvent;
 import net.benfro.library.userhub.event.UserApplicationEventPublisher;
 import net.benfro.library.userhub.model.Person;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
 import reactor.kafka.receiver.ReceiverRecord;
 import reactor.test.StepVerifier;
@@ -27,6 +29,9 @@ class UserEventKafkaProducerIntegrationTest extends AbstractKafkaIT {
 
     @Autowired
     UserApplicationEventPublisher publisher;
+
+    @MockBean
+    RSocketServerBootstrap rSocketServerBootstrap;
 
     @Test
     void test_user_message_is_put_on_kafka_topic_when_internal_event_is_published() {
