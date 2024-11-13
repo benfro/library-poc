@@ -1,6 +1,11 @@
 spring:
-  rsocket:
-    server:
-      port: 7060
   application:
     name: gateway-api
+  main:
+    web-application-type: reactive
+
+
+
+
+server:
+  port: 8080
