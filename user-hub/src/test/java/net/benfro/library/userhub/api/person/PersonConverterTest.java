@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PersonConverterTest {
 
     Person person;
-    PersonRequest request;
+    PersonDTO request;
 
     @BeforeEach
     void setUp() {
@@ -28,12 +28,12 @@ class PersonConverterTest {
                         .build())
                 .build();
 
-        request = new PersonRequest(1L, "John", "the Baptist", "john@saint.com", uuid);
+        request = new PersonDTO(1L, "John", "the Baptist", "john@saint.com", uuid);
     }
 
     @Test
-    void personRequestToPerson() {
-        Person result = PersonConverter.INSTANCE.personRequestToPerson(request);
+    void personDtoToPerson() {
+        Person result = PersonConverter.INSTANCE.personDtoToPerson(request);
 
         assertAll("All",
                 () -> assertEquals(1L, result.getId()),
@@ -45,8 +45,8 @@ class PersonConverterTest {
     }
 
     @Test
-    void personToPersonRequest() {
-        PersonRequest result = PersonConverter.INSTANCE.personToPersonRequest(person);
+    void personToPersonDto() {
+        PersonDTO result = PersonConverter.INSTANCE.personToPersonDto(person);
 
         assertAll("All",
                 () -> assertEquals(1L, result.getId()),
@@ -57,8 +57,8 @@ class PersonConverterTest {
     }
 
     @Test
-    void personToPersonResponse() {
-        PersonResponse result = PersonConverter.INSTANCE.personToPersonResponse(person);
+    void personToPersonDTO() {
+        PersonDTO result = PersonConverter.INSTANCE.personToPersonDto(person);
 
         assertAll("All",
                 () -> assertEquals(1L, result.getId()),

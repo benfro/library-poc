@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import net.benfro.library.userhub.event.UserApplicationEvent;
 import net.benfro.library.userhub.event.UserApplicationEventPublisher;
-import net.benfro.library.userhub.message.UserEventKafkaProducer;
 import net.benfro.library.userhub.repository.PersonRepository;
 import reactor.core.publisher.Mono;
 
@@ -23,16 +22,16 @@ public class PersonRSocketController {
     private UserApplicationEventPublisher userEventPublisher;
 
     @MessageMapping("findPersonById")
-    public Mono<PersonResponse> findById(PersonRequest request) {
+    public Mono<PersonDTO> findById(PersonDTO request) {
         return personRepository.getById(request.getId())
             .switchIfEmpty(Mono.error(new RuntimeException("Person not found")))
-            .map(p -> PersonConverter.INSTANCE.personToPersonResponse(p))
+            .map(p -> PersonConverter.INSTANCE.personToPersonDto(p))
             .doOnError(e -> log.error(e.getMessage(), e));
     }
 
     @Transactional
     @MessageMapping("updatePerson")
-    public Mono<Void> updatePerson(PersonRequest request) {
+    public Mono<Void> updatePerson(PersonDTO request) {
         return personRepository.getById(request.getId())
             .switchIfEmpty(Mono.error(new RuntimeException("Person not found")))
             .map(person -> PersonConverter.INSTANCE.updatePersonInstance(request, person))
@@ -42,9 +41,9 @@ public class PersonRSocketController {
 
     @Transactional
     @MessageMapping("createPerson")
-    public Mono<Long> createPerson(PersonRequest request) {
+    public Mono<Long> createPerson(PersonDTO request) {
         return Mono.just(request)
-            .map(pr -> PersonConverter.INSTANCE.personRequestToPerson(pr))
+            .map(pr -> PersonConverter.INSTANCE.personDtoToPerson(pr))
             .flatMap(p -> personRepository.persist(p))
             .doOnNext(e -> {
                 personRepository.getById(e)

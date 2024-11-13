@@ -65,11 +65,11 @@ class PersonRSocketControllerTest implements IntegrationTest {
         var generatedId = saveAndReturnId();
 
         // Send a request message (1)
-        PersonRequest data = new PersonRequest().withId(generatedId);
-        Mono<PersonResponse> result = requester
+        PersonDTO data = new PersonDTO().withId(generatedId);
+        Mono<PersonDTO> result = requester
             .route("findPersonById")
             .data(data)
-            .retrieveMono(PersonResponse.class);
+            .retrieveMono(PersonDTO.class);
 
         // Verify that the response message contains the expected data (2)
         StepVerifier
@@ -92,7 +92,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
             .as(tx::transactional)
             .block();
 
-        PersonRequest data = PersonConverter.INSTANCE.personToPersonRequest(person);
+        PersonDTO data = PersonConverter.INSTANCE.personToPersonDto(person);
         data.setFirstName("PELLE");
         // When: Send a request message (1)
         Mono<Void> result = requester
@@ -113,7 +113,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
     @Test
     void createPerson_path_should_create_a_person() {
         // Given
-        var personRequest = PersonRequest.builder()
+        var personRequest = PersonDTO.builder()
             .firstName("Per")
             .lastName("andersson")
             .email("per@pandersson.com")
