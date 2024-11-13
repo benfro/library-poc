@@ -1,5 +1,7 @@
 package net.benfro.library.userhub.api.person;
 
+import lombok.RequiredArgsConstructor;
+import net.benfro.library.userhub.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -12,46 +14,27 @@ import net.benfro.library.userhub.repository.PersonRepository;
 import reactor.core.publisher.Mono;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 public class PersonRSocketController {
 
-    @Autowired
-    private PersonRepository personRepository;
+    private final PersonService personService;
 
-    @Autowired
-    private UserApplicationEventPublisher userEventPublisher;
-
-    @MessageMapping("findPersonById")
+    @MessageMapping({"findPersonById"})
     public Mono<PersonDTO> findById(PersonDTO request) {
-        return personRepository.getById(request.getId())
-            .switchIfEmpty(Mono.error(new RuntimeException("Person not found")))
-            .map(p -> PersonConverter.INSTANCE.personToPersonDto(p))
-            .doOnError(e -> log.error(e.getMessage(), e));
+        return personService.findById(request);
     }
 
     @Transactional
     @MessageMapping("updatePerson")
     public Mono<Void> updatePerson(PersonDTO request) {
-        return personRepository.getById(request.getId())
-            .switchIfEmpty(Mono.error(new RuntimeException("Person not found")))
-            .map(person -> PersonConverter.INSTANCE.updatePersonInstance(request, person))
-            .flatMap(person -> personRepository.update(person))
-            .then();
+        return personService.updatePerson(request);
     }
 
     @Transactional
     @MessageMapping("createPerson")
     public Mono<Long> createPerson(PersonDTO request) {
-        return Mono.just(request)
-            .map(pr -> PersonConverter.INSTANCE.personDtoToPerson(pr))
-            .flatMap(p -> personRepository.persist(p))
-            .doOnNext(e -> {
-                personRepository.getById(e)
-                    .doOnNext(uem -> this.userEventPublisher
-                        .publishUserApplicationEvent(UserApplicationEvent.ofAdded(uem.getPayload())))
-                    .then();
-            })
-            .doOnError(e -> log.error("there was an error: {}", e.getMessage()));
+        return personService.createPerson(request);
     }
 
 }
