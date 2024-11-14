@@ -17,7 +17,8 @@ public class RSocketClientConfig {
 
     @Bean
     public RSocketRequester userHubRSocketRequester() {
-        return getRSocketRequester(connectConfig.getUserHubRestPort());
+        return getRSocketRequester(7878);
+//        return getRSocketRequester(connectConfig.getUserHubRestPort());
     }
 
 
