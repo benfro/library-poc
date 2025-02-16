@@ -7,15 +7,15 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
-import net.benfro.library.userhub.model.Person;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
 import net.benfro.library.userhub.IntegrationTest;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.PersonRepository;
 
 //@SpringBootTest
-class PersonRepositoryTest implements IntegrationTest {
+class PersonEntityRepositoryTest implements IntegrationTest {
 
     @Autowired
     private PersonRepository personRepository;
@@ -33,8 +33,8 @@ class PersonRepositoryTest implements IntegrationTest {
     @Test
     void persist_should_generate_id_and_add_a_uuid_if_not_provided() {
         // given
-        var user = Person.builder()
-            .payload(Person.Payload.builder()
+        var user = PersonEntity.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName("Per")
                 .lastName("andersson")
                 .email("per@pandersson.com")
@@ -50,7 +50,7 @@ class PersonRepositoryTest implements IntegrationTest {
         assertThat(generatedId).isNotNull().isPositive();
 
         // and
-        Person person = personRepository.getById(generatedId).as(tx::transactional).block();
+        PersonEntity person = personRepository.getById(generatedId).as(tx::transactional).block();
         assertThat(person.getPayload().getPersonId()).isNotNull();
     }
 
@@ -69,8 +69,8 @@ class PersonRepositoryTest implements IntegrationTest {
     @Test
     void findById_should_return_persisted_person() {
         // given
-        var person = Person.builder()
-            .payload(Person.Payload.builder()
+        var person = PersonEntity.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName("Per")
                 .lastName("andersson")
                 .email("per@pandersson.com")
@@ -93,8 +93,8 @@ class PersonRepositoryTest implements IntegrationTest {
     @Test
     void findAll_should_return_persisted_persons() {
         // given
-        var person = Person.builder()
-            .payload(Person.Payload.builder()
+        var person = PersonEntity.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName("Per")
                 .lastName("andersson")
                 .email("per@pandersson.com")
@@ -122,8 +122,8 @@ class PersonRepositoryTest implements IntegrationTest {
     @Test
     void findByISBN_should_return_matching_person() {
         // given
-        var user = Person.builder()
-            .payload(Person.Payload.builder()
+        var user = PersonEntity.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName("Per")
                 .lastName("andersson")
                 .email("per@pandersson.com")
@@ -147,8 +147,8 @@ class PersonRepositoryTest implements IntegrationTest {
     @Test
     void update_should_return_an_updated_person() {
         // given
-        var user = Person.builder()
-            .payload(Person.Payload.builder()
+        var user = PersonEntity.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName("Per")
                 .lastName("andersson")
                 .email("per@pandersson.com")
@@ -159,7 +159,7 @@ class PersonRepositoryTest implements IntegrationTest {
             .as(tx::transactional)
             .block();
 
-        Person person = personRepository.getById(generatedId).as(tx::transactional).block();
+        PersonEntity person = personRepository.getById(generatedId).as(tx::transactional).block();
 
         // when
         person.setPayload(person.getPayload().withFirstName("Jane"));

@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.model;
+package net.benfro.library.userhub.person.adapter.outgoing.persistence.model;
 
 
 import java.util.UUID;
@@ -13,7 +13,7 @@ import lombok.With;
 @Data
 @Builder
 @AllArgsConstructor
-public class Person {
+public class PersonEntity {
 
     private Long id;
 

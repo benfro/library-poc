@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.repository;
+package net.benfro.library.userhub.person.adapter.outgoing.persistence;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,8 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.r2dbc.spi.Readable;
 import net.benfro.library.commons.Squtils;
-import net.benfro.library.userhub.model.Person;
-import net.benfro.library.userhub.repository.sql.PersonQueries;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -37,7 +36,7 @@ public class PersonRepository {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public Mono<Long> persist(Person person) {
+    public Mono<Long> persist(PersonEntity person) {
         Validate.notNull(person, "Person can't be null");
 
         final Long id = person.getId();
@@ -55,7 +54,7 @@ public class PersonRepository {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public Mono<Void> update(Person person) {
+    public Mono<Void> update(PersonEntity person) {
         Validate.notNull(person, "Person can't be null");
         // TODO Update should not include non-updatable fields
         return db.sql(sql.update())
@@ -72,13 +71,13 @@ public class PersonRepository {
      *
      * @return A {@link Flux} of all books.
      */
-    public Flux<Person> all() {
+    public Flux<PersonEntity> all() {
         return db.sql(sql.selectAll())
             .map(rowToPerson())
             .all();
     }
 
-    public Mono<Person> findByEmail(String email) {
+    public Mono<PersonEntity> findByEmail(String email) {
         Validate.notEmpty(email, "Email can't be null or empty");
         return db.sql(sql.selectAllWhere("email"))
             .bind("email", email)
@@ -86,7 +85,7 @@ public class PersonRepository {
             .one();
     }
 
-    public Mono<Person> findByPersonId(String personId) {
+    public Mono<PersonEntity> findByPersonId(String personId) {
         Validate.notEmpty(personId, "Person ID can't be null or empty");
         return db.sql(sql.selectAllWhere("person_id"))
             .bind("person_id", personId)
@@ -94,7 +93,7 @@ public class PersonRepository {
             .one();
     }
 
-    public Mono<Person> getById(Long id) {
+    public Mono<PersonEntity> getById(Long id) {
         Validate.notNull(id, "id can't be null");
 
         return db.sql(sql.selectById())
@@ -103,7 +102,7 @@ public class PersonRepository {
             .one();
     }
 
-    public Flux<Person> getByIds(List<Long> ids) {
+    public Flux<PersonEntity> getByIds(List<Long> ids) {
         Validate.notNull(ids, "ids can't be null");
 
         if (ids.isEmpty()) {
@@ -116,10 +115,10 @@ public class PersonRepository {
             .all();
     }
 
-    private Function<Readable, Person> rowToPerson() {
-        return r -> Person.builder()
+    private Function<Readable, PersonEntity> rowToPerson() {
+        return r -> PersonEntity.builder()
             .id(r.get("id", Long.class))
-            .payload(Person.Payload.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName(r.get("first_name", String.class))
                 .lastName(r.get("last_name", String.class))
                 .email(r.get("email", String.class))

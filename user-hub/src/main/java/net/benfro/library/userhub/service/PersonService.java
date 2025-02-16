@@ -6,7 +6,7 @@ import net.benfro.library.userhub.api.person.PersonConverter;
 import net.benfro.library.userhub.api.person.PersonDTO;
 import net.benfro.library.userhub.event.UserApplicationEvent;
 import net.benfro.library.userhub.event.UserApplicationEventPublisher;
-import net.benfro.library.userhub.repository.PersonRepository;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

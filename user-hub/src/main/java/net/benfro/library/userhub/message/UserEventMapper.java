@@ -5,7 +5,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import net.benfro.library.userhub.event.UserApplicationEvent;
-import net.benfro.library.userhub.model.Person;
 
 @Mapper
 public interface UserEventMapper {

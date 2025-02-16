@@ -1,6 +1,7 @@
 package net.benfro.library.userhub.api.person;
 
-import net.benfro.library.userhub.model.Person;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -18,21 +19,21 @@ public interface PersonConverter {
     @Mapping(source = "lastName", target = "payload.lastName")
     @Mapping(source = "email", target = "payload.email")
     @Mapping(source = "personId", target = "payload.personId")
-    Person personDtoToPerson(PersonDTO personDTO);
+    PersonEntity personDtoToPerson(PersonDTO personDTO);
 
     @Mapping(target = "firstName", source = "payload.firstName")
     @Mapping(target = "lastName", source = "payload.lastName")
     @Mapping(target = "email", source = "payload.email")
     @Mapping(target = "personId", source = "payload.personId")
 //    @Mapping(target = "withId", ignore = true)
-    PersonDTO personToPersonDto(Person person);
+    PersonDTO personToPersonDto(PersonEntity person);
 
     @Mapping(target = "payload", qualifiedByName = "toPayload")
-    default Person updatePersonInstance(PersonDTO personDTO, @MappingTarget Person person) {
+    default PersonEntity updatePersonInstance(PersonDTO personDTO, @MappingTarget PersonEntity person) {
         if (Objects.isNull(person)) {
             return null;
         }
-        person.setPayload(new Person.Payload(personDTO.getFirstName(),
+        person.setPayload(new PersonEntity.Payload(personDTO.getFirstName(),
                 personDTO.getLastName(),
                 personDTO.getEmail(),
                 personDTO.getPersonId()));
@@ -41,8 +42,8 @@ public interface PersonConverter {
     }
 
     @Named("toPayload")
-    default Person.Payload mapReqToPayload(PersonDTO personDTO) {
-        return new Person.Payload(
+    default PersonEntity.Payload mapReqToPayload(PersonDTO personDTO) {
+        return new PersonEntity.Payload(
                 personDTO.getFirstName(),
                 personDTO.getLastName(),
                 personDTO.getEmail(),

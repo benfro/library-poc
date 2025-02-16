@@ -14,8 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import net.benfro.library.userhub.AbstractKafkaIT;
 import net.benfro.library.userhub.event.UserApplicationEvent;
 import net.benfro.library.userhub.event.UserApplicationEventPublisher;
-import net.benfro.library.userhub.model.Person;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
 import reactor.core.publisher.Flux;
 import reactor.kafka.receiver.ReceiverRecord;
 import reactor.test.StepVerifier;
@@ -38,7 +39,7 @@ class UserEventKafkaProducerIntegrationTest extends AbstractKafkaIT {
         // Given
         UserApplicationEvent event = UserApplicationEvent.builder()
             .action(UserApplicationEvent.Action.USER_ADDED)
-            .payload(Person.Payload.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName("foo")
                 .lastName("bar")
                 .email("phlipp")

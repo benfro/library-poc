@@ -16,8 +16,8 @@ import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
 import lombok.extern.slf4j.Slf4j;
-import net.benfro.library.userhub.model.Person;
-import net.benfro.library.userhub.repository.PersonRepository;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.PersonRepository;
 import net.benfro.library.userhub.IntegrationTest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -88,7 +88,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
         // Given
         var generatedId = saveAndReturnId();
 
-        Person person = personRepository.getById(generatedId)
+        PersonEntity person = personRepository.getById(generatedId)
             .as(tx::transactional)
             .block();
 
@@ -105,7 +105,7 @@ class PersonRSocketControllerTest implements IntegrationTest {
             .create(result)
             .verifyComplete();
 
-        Person savedBlock = personRepository.getById(generatedId)
+        PersonEntity savedBlock = personRepository.getById(generatedId)
             .block();
         assertEquals("PELLE", savedBlock.getPayload().getFirstName());
     }
@@ -136,8 +136,8 @@ class PersonRSocketControllerTest implements IntegrationTest {
     }
 
     private @Nullable Long saveAndReturnId() {
-        var p = Person.builder()
-            .payload(Person.Payload.builder()
+        var p = PersonEntity.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName("Per")
                 .lastName("andersson")
                 .email("per@pandersson.com")

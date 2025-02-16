@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.repository.sql;
+package net.benfro.library.userhub.person.adapter.outgoing.persistence;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

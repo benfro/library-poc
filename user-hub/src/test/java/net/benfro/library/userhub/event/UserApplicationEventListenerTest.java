@@ -1,15 +1,11 @@
 package net.benfro.library.userhub.event;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import net.benfro.library.userhub.message.UserEventKafkaProducer;
 import net.benfro.library.userhub.message.UserEventMapper;
-import net.benfro.library.userhub.model.Person;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest
@@ -42,7 +38,7 @@ class UserApplicationEventListenerTest {
         // Given
         UserApplicationEvent event = UserApplicationEvent.builder()
             .action(UserApplicationEvent.Action.USER_ADDED)
-            .payload(Person.Payload.builder()
+            .payload(PersonEntity.Payload.builder()
                 .firstName("foo")
                 .lastName("bar")
                 .email("phlipp")

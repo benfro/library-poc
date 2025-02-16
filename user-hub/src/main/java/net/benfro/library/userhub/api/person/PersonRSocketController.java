@@ -2,15 +2,12 @@ package net.benfro.library.userhub.api.person;
 
 import lombok.RequiredArgsConstructor;
 import net.benfro.library.userhub.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
-import net.benfro.library.userhub.event.UserApplicationEvent;
-import net.benfro.library.userhub.event.UserApplicationEventPublisher;
-import net.benfro.library.userhub.repository.PersonRepository;
 import reactor.core.publisher.Mono;
 
 @Slf4j

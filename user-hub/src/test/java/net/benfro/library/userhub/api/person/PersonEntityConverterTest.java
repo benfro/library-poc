@@ -1,6 +1,7 @@
 package net.benfro.library.userhub.api.person;
 
-import net.benfro.library.userhub.model.Person;
+import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,18 +10,18 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PersonConverterTest {
+class PersonEntityConverterTest {
 
-    Person person;
+    PersonEntity person;
     PersonDTO request;
 
     @BeforeEach
     void setUp() {
         var uuid = UUID.randomUUID();
 
-        person = Person.builder()
+        person = PersonEntity.builder()
                 .id(1L)
-                .payload(Person.Payload.builder()
+                .payload(PersonEntity.Payload.builder()
                         .firstName("John")
                         .lastName("the Baptist")
                         .email("john@saint.com")
@@ -33,7 +34,7 @@ class PersonConverterTest {
 
     @Test
     void personDtoToPerson() {
-        Person result = PersonConverter.INSTANCE.personDtoToPerson(request);
+        PersonEntity result = PersonConverter.INSTANCE.personDtoToPerson(request);
 
         assertAll("All",
                 () -> assertEquals(1L, result.getId()),
