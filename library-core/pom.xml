@@ -181,9 +181,11 @@
       <artifactId>r2dbc</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter</artifactId>
+    </dependency>
   </dependencies>
-
-
   <build>
     <plugins>
       <plugin>

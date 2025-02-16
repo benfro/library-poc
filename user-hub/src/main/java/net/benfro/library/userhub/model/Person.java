@@ -1,20 +1,18 @@
 package net.benfro.library.userhub.model;
 
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import lombok.With;
 
-import java.util.UUID;
 
-@AllArgsConstructor
 @Data
 @Builder
+@AllArgsConstructor
 public class Person {
 
     private Long id;
@@ -28,8 +26,6 @@ public class Person {
         @With @Getter String lastName,
         @With @Getter String email,
         @With @Getter UUID personId
-    ) {
-
-    }
+    ) {}
 
 }
