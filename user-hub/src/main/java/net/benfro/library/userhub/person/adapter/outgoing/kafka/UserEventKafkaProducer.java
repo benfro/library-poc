@@ -1,12 +1,11 @@
-package net.benfro.library.userhub.message;
-
-import java.util.UUID;
+package net.benfro.library.userhub.person.adapter.outgoing.kafka;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.benfro.library.userhub.person.application.ports.outgoing.kafka.UserEventMessage;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 import reactor.kafka.sender.SenderRecord;

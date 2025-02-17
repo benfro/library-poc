@@ -1,5 +1,7 @@
 package net.benfro.library.userhub.api.person;
 
+import net.benfro.library.userhub.person.adapter.incoming.rest.PersonConverter;
+import net.benfro.library.userhub.person.adapter.incoming.rest.PersonDTO;
 import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
 
 import org.junit.jupiter.api.BeforeEach;

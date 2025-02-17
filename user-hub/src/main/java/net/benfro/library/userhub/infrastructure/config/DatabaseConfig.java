@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.config;
+package net.benfro.library.userhub.infrastructure.config;
 
 import static io.r2dbc.spi.ConnectionFactoryOptions.DATABASE;
 import static io.r2dbc.spi.ConnectionFactoryOptions.DRIVER;

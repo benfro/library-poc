@@ -1,10 +1,11 @@
-package net.benfro.library.userhub.message;
+package net.benfro.library.userhub.person.application.model;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import net.benfro.library.userhub.event.UserApplicationEvent;
+import net.benfro.library.userhub.person.application.ports.outgoing.kafka.UserEventMessage;
 
 @Mapper
 public interface UserEventMapper {

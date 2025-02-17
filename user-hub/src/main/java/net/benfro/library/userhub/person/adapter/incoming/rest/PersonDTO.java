@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.api.person;
+package net.benfro.library.userhub.person.adapter.incoming.rest;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

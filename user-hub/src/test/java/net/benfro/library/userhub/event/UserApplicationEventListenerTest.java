@@ -13,8 +13,8 @@ import org.springframework.boot.rsocket.context.RSocketServerBootstrap;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import net.benfro.library.userhub.message.UserEventKafkaProducer;
-import net.benfro.library.userhub.message.UserEventMapper;
+import net.benfro.library.userhub.person.adapter.outgoing.kafka.UserEventKafkaProducer;
+import net.benfro.library.userhub.person.application.model.UserEventMapper;
 import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
 import org.springframework.test.annotation.DirtiesContext;
 

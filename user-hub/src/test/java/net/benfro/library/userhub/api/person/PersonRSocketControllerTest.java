@@ -16,6 +16,8 @@ import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
 import lombok.extern.slf4j.Slf4j;
+import net.benfro.library.userhub.person.adapter.incoming.rest.PersonConverter;
+import net.benfro.library.userhub.person.adapter.incoming.rest.PersonDTO;
 import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
 import net.benfro.library.userhub.person.adapter.outgoing.persistence.PersonRepository;
 import net.benfro.library.userhub.IntegrationTest;

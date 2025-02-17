@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.message;
+package net.benfro.library.userhub.person.application.model;
 
 import java.util.UUID;
 
@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.benfro.library.userhub.person.application.ports.outgoing.kafka.UserEventMessage;
 
 /**
  * Sent to Kafka on user events
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEventMessage {
+public class UserEventMessageImpl implements UserEventMessage {
 
     private String firstName;
     private String lastName;

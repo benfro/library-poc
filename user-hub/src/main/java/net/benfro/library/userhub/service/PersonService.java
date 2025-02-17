@@ -2,8 +2,8 @@ package net.benfro.library.userhub.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.benfro.library.userhub.api.person.PersonConverter;
-import net.benfro.library.userhub.api.person.PersonDTO;
+import net.benfro.library.userhub.person.adapter.incoming.rest.PersonConverter;
+import net.benfro.library.userhub.person.adapter.incoming.rest.PersonDTO;
 import net.benfro.library.userhub.event.UserApplicationEvent;
 import net.benfro.library.userhub.event.UserApplicationEventPublisher;
 import net.benfro.library.userhub.person.adapter.outgoing.persistence.PersonRepository;

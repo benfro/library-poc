@@ -20,7 +20,7 @@ public class UserApplicationEvent {
     public enum Action {
         USER_ADDED,
         USER_UPDATED,
-        USER_DELETED;
+        USER_DELETED
     }
 
     private final PersonEntity.Payload payload;

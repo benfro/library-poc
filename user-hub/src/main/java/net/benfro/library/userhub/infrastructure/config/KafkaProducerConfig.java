@@ -1,12 +1,12 @@
-package net.benfro.library.userhub.config;
+package net.benfro.library.userhub.infrastructure.config;
 
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
 
-import net.benfro.library.userhub.message.UserEventKafkaProducer;
-import net.benfro.library.userhub.message.UserEventMessage;
+import net.benfro.library.userhub.person.adapter.outgoing.kafka.UserEventKafkaProducer;
+import net.benfro.library.userhub.person.application.ports.outgoing.kafka.UserEventMessage;
 import reactor.core.publisher.Sinks;
 import reactor.kafka.sender.SenderOptions;
 

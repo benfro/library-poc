@@ -1,4 +1,4 @@
-package net.benfro.library.userhub.api.person;
+package net.benfro.library.userhub.person.adapter.incoming.rest;
 
 import lombok.RequiredArgsConstructor;
 import net.benfro.library.userhub.service.PersonService;

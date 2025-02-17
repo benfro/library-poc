@@ -17,6 +17,8 @@ import net.benfro.library.userhub.event.UserApplicationEventPublisher;
 import net.benfro.library.userhub.person.adapter.outgoing.persistence.model.PersonEntity;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import net.benfro.library.userhub.person.application.model.UserEventMessageImpl;
+import net.benfro.library.userhub.person.application.ports.outgoing.kafka.UserEventMessage;
 import reactor.core.publisher.Flux;
 import reactor.kafka.receiver.ReceiverRecord;
 import reactor.test.StepVerifier;
